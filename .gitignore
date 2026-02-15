@@ -29,3 +29,9 @@ artifacts/
 # OS
 .DS_Store
 Thumbs.db
+
+# Local assistant/context files
+AGENTS.md
+.claude/
+archive/
+progress.txt
