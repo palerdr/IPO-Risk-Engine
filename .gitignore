@@ -1,0 +1,30 @@
+# Python / venv
+.venv/
+__pycache__/
+*.py[cod]
+*.pyd
+.pytest_cache/
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# IDE
+.vscode/
+.idea/
+
+# Local data artifacts
+data/raw/
+data/features/
+data/reports/
+data/dataset/
+data/pilot/
+data/state_inference/
+data/*manifest.json
+data/*.parquet
+artifacts/
+
+# OS
+.DS_Store
+Thumbs.db
