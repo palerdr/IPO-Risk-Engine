@@ -1,0 +1,58 @@
+{
+  "version": "4.0.0-draft",
+  "status": "design_only_no_allocator_model_fitted",
+  "written_on": "2026-09-07",
+  "actor": "An allocator with an executable offer for a fixed dollar allocation at the final IPO price.",
+  "actions": ["accept_fixed_allocation", "decline_and_hold_cash"],
+  "decision_time": "The recorded allocation acceptance deadline, after final terms become available and before the first trade. Exclude opportunities without evidence that this action was feasible.",
+  "target": {
+    "primary": "Continuous total return from the offer price to the twentieth exchange-session close, less the matched cash return.",
+    "share_basis": "Track the shares and cash received for one original offered share through splits, distributions, and security conversions. Divide terminal wealth by the nominal offer price. Do not divide vendor-adjusted prices by an unadjusted offer price.",
+    "secondary": "Minimum entry-relative wealth during the holding window, with the same share-basis accounting.",
+    "non_trading_outcomes": "Preserve halts and delistings. Require a documented terminal valuation or settlement convention before fitting. Do not drop an outcome because the security stopped trading."
+  },
+  "decision_loss": {
+    "formula": "L(a,R,lambda,c) = a * (lambda * max(-R,0) - max(R,0) + c)",
+    "return_unit": "Fraction of the offered allocation value; R includes distributions and the cash opportunity cost, before c.",
+    "default_policy": "Decline: loss equals zero.",
+    "research_primary_downside_weight": 2,
+    "research_primary_cost_bps": 50,
+    "sensitivity_downside_weights": [1, 2, 4, 8],
+    "sensitivity_cost_bps": [0, 25, 50, 100],
+    "assumption_status": "Research scenarios, not measured transaction costs or an elicited investor utility.",
+    "accept_rule": "Accept when predicted E[R] - (lambda - 1) * E[max(-R,0)] - c exceeds zero. Resolve ties by declining."
+  },
+  "reference_policies": {
+    "defaults": ["decline_all", "accept_all_eligible_fixed_allocations"],
+    "single_feature": "Offer-price ranking with direction and threshold selected inside chronological training validation. Add revision-from-initial-filing-range as a second one-feature candidate after timestamp validation. Select the reference inside training, never from the outer test results.",
+    "no_fill_assumption": "Results condition on access to a fixed allocation. Do not claim portfolio returns or equal access to oversubscribed offerings."
+  },
+  "models": {
+    "first_comparison": ["regularized_linear", "catboost"],
+    "decision_heads": ["conditional_mean_return", "conditional_mean_downside"],
+    "risk_display": "Fit return quantiles with linear quantile regression and CatBoost quantile loss. Report quantile calibration and pinball loss. Compute policy expected shortfall from realized outcomes with uncertainty; do not infer tail means from a few quantiles.",
+    "neural_models": "Defer TabNet until a model improves expected policy loss over the one-feature rule.",
+    "selection": "Freeze feature definitions, missing-value handling, candidate grids, and implementation hashes before any prospective forecast. Select within purged chronological training folds."
+  },
+  "data": {
+    "development_listing_start": "2018-01-01",
+    "development_listing_end": "2025-12-31",
+    "coverage": "Use the 2018-onward restriction for development. Preserve missing and delisted issuers in the registry and publish coverage by cohort. The restriction does not remove survivorship bias.",
+    "required_dated_features": ["initial_range_midpoint", "final_offer_revision", "gross_deal_size", "public_float_fraction", "prior_year_underwriter_rank", "lockup_terms", "secondary_selling_fraction", "s1_revenue_growth", "s1_operating_margin", "s1_amendment_count", "days_from_first_public_filing"],
+    "provenance": "Store accession, acceptance timestamp, source URL, document hash, excerpt, unit, reporting period, and extraction status for each field. Use documents accepted before the decision deadline. Allow a later 424B4 for reconciliation; it cannot establish earlier public availability without a separate timestamped source.",
+    "day_20_features": "Defer this separate actor. Do not encode universal session-25 quiet-period expiry or session-30 stabilization expiry. Use dated issuer-specific terms and publication dates for any later study."
+  },
+  "evaluation": {
+    "primary": "Paired mean policy loss per eligible allocation opportunity versus the training-selected one-feature policy at the primary research cost assumptions.",
+    "secondary": ["policy_loss_surface_over_cost_assumptions", "fraction_of_actions_changed", "net_cash_relative_return", "realized_policy_expected_shortfall"],
+    "execution": "Require offer-price access evidence, exit-price and cost conventions, available capital, overlapping positions, and delisting treatment before calling a result an execution backtest.",
+    "uncertainty": "Use paired calendar-block intervals and show outcomes by time block. Report action-boundary diagnostics. Do not claim incremental value from a post-hoc AUC comparison.",
+    "prospective_period": "Choose a start after the final protocol and implementation commit. September 8, 2026 is the earliest candidate as of this draft; earlier 2026 outcomes cannot be pre-registered on September 7. Freeze the end date and sample-size rule before collecting prospective outcomes.",
+    "activation_gates": ["common_share_basis_and_delisting_treatment", "dated_feature_audit", "frozen_model_and_policy_configuration", "timestamped_protocol_and_implementation_commit"]
+  },
+  "anthropic": {
+    "presentation": "Comparable IPOs with filing-range revision, deal size, public float, and offer-based price paths through session 40. Keep valuation scenarios separate from empirical comparables.",
+    "selection": "Freeze sector and size rules before inspecting comparable returns. Report the resulting count; the current data does not substantiate a cohort of thirty comparable large-cap technology IPOs.",
+    "model_use": "Do not present an allocation recommendation from the historical drawdown classifiers."
+  }
+}
