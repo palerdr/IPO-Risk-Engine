@@ -12,9 +12,27 @@
         "body": "# IPO challenger study"
       },
       {
+        "id": "decision-summary",
+        "type": "markdown",
+        "body": "## You have no demonstrated allocation-policy benefit\n\nYou have no demonstrated decision value from this forecast benchmark. On 953 pre-IPO cases with an offer price, I measured AUC of 0.705 for negative log offer price and 0.702 for logistic regression on those same cases. On 964 day-20 cases, I measured 0.727 for realized volatility; the best model AUC was 0.718. I added these one-feature references after the original evaluation, so you should treat the comparison as a diagnostic. AUC describes ranking for the existing drawdown label. It does not establish the expected loss of an allocation policy.",
+        "sourceId": "decision_audit"
+      },
+      {
+        "id": "entry-target",
+        "type": "markdown",
+        "body": "## You need entry-based outcomes for an allocator\n\nI reproduced a nonnegative terminal return proxy for 342 of 496 pre-IPO events (69.0%), and 87 of 446 day-20 events (19.5%). You must keep the price bases visible: the pre-IPO proxy divides vendor-adjusted closes by nominal offer prices. You need split and distribution accounting on the original offered-share basis before calling that proxy allocator P&L. You should also distinguish a terminal recovery from a path that stayed above entry. I measured a median first-close/offer proxy of 27.0% and a correlation of 0.064 with the pre-IPO event label. The current label measures a decline from a running peak and does not encode loss from the allocation price.",
+        "sourceId": "decision_audit"
+      },
+      {
+        "id": "coverage-audit",
+        "type": "markdown",
+        "body": "## Coverage and event rates change together\n\nAcross the sixteen IPO years from 2010 to 2025, I measured correlations of 0.810 before the IPO and 0.892 at day 20 between price coverage and annual event rate. You cannot use these correlations to separate missing-history bias from changes in issuer mix or market conditions. The 2018-onward refit below tests dependence on the older cohort; it does not remove survivorship bias.",
+        "sourceId": "decision_audit"
+      },
+      {
         "id": "summary",
         "type": "markdown",
-        "body": "## CatBoost has modest aggregate gains\n\nI trained CatBoost and TabNet for pre-IPO and day-20 drawdown forecasts. Across 980 pre-IPO test cases, I measured CatBoost Brier error of 0.2437, versus 0.2572 for logistic regression. Across 964 day-20 test cases, I measured 0.2212 for CatBoost with issuer traits and 0.2265 for the original logistic benchmark. You should treat these as point-estimate gains: both paired confidence intervals include zero. I measured higher aggregate error for TabNet in both stages. After restricting training to listings from 2018 onward, I measured pre-IPO Brier error of 0.2352 for logistic regression and 0.2501 for CatBoost on the same 795 test cases from 2020\u20132025.",
+        "body": "## You can inspect the historical forecast comparison\n\nI trained CatBoost and TabNet for pre-IPO and day-20 drawdown forecasts. Across 980 pre-IPO test cases, I measured CatBoost Brier error of 0.2437, versus 0.2572 for logistic regression. Across 964 day-20 test cases, I measured 0.2212 for CatBoost with issuer traits and 0.2265 for the original logistic benchmark. You should treat these as point-estimate gains: both paired confidence intervals include zero. I measured higher aggregate error for TabNet in both stages. After restricting training to listings from 2018 onward, I measured pre-IPO Brier error of 0.2352 for logistic regression and 0.2501 for CatBoost on the same 795 test cases from 2020\u20132025.",
         "sourceId": "results"
       },
       {
@@ -170,7 +188,7 @@
       {
         "id": "next",
         "type": "markdown",
-        "body": "## You can retain the challengers for the next study\n\nYou can retain CatBoost as a challenger and logistic regression as the reference model. For the next research step, obtain delisted-security coverage and dated filing financials, then reserve a new evaluation period before tuning. For an Anthropic case study, you need final offering terms and verified issuer traits to run the pre-IPO model. You can run the day-20 model after twenty observed trading sessions. You still need evidence that either model transfers to a company of Anthropic's scale.",
+        "body": "## You need an allocator study before recommending an action\n\nYou have no demonstrated allocation-policy benefit from these classifiers. For the next study, use an allocator who can accept or decline a fixed allocation at the offer price and exit at close 20. You need continuous entry-based returns on a common share basis and dated offering terms before fitting a return model. You should compare expected policy loss with a single-feature policy and with accepting or declining all eligible allocations. For Anthropic, build a table of comparable deal terms and offer-based price paths. You must define the comparable cohort before counting it or inspecting returns. The current study does not validate a model recommendation for Anthropic.",
         "sourceId": "results"
       }
     ],
@@ -600,6 +618,11 @@
             "coverage_forecasts"
           ]
         }
+      },
+      {
+        "id": "decision_audit",
+        "label": "Frozen-data decision relevance audit",
+        "path": "research/decision/audit.json"
       }
     ]
   },
@@ -1330,6 +1353,11 @@
           "coverage_forecasts"
         ]
       }
+    },
+    {
+      "id": "decision_audit",
+      "label": "Frozen-data decision relevance audit",
+      "path": "research/decision/audit.json"
     }
   ]
 }

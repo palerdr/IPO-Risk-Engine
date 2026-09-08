@@ -7,7 +7,7 @@
     "verification": "passed"
   },
   "counts": {
-    "blocks": 28,
+    "blocks": 31,
     "charts": 3,
     "html": 0,
     "metrics": 0,
@@ -20,14 +20,14 @@
     390
   ],
   "timings": {
-    "validateAndPackageMs": 916.9,
-    "staticChartExtractionMs": 871.4,
-    "browserRunMs": 682.4,
-    "readerReadyMs": 47.6,
+    "validateAndPackageMs": 1072.2,
+    "staticChartExtractionMs": 1022.1,
+    "browserRunMs": 709.9,
+    "readerReadyMs": 49.2,
     "contentChecksMs": 32,
-    "sourceDialogMs": 32.1,
+    "sourceDialogMs": 32,
     "responsiveChecksMs": 32,
-    "verificationMs": 690.9,
-    "totalMs": 1611.2
+    "verificationMs": 719,
+    "totalMs": 1796.1
   }
 }

@@ -1,5 +1,7 @@
 # IPO Risk Research
 
+You have a reproducible forecast benchmark with no demonstrated allocation-policy benefit. Read the [decision audit and allocator design](research/decision/README.md) before using the model scores.
+
 You can replay real listing-risk predictions and inspect the model evaluation. The MVP estimates the probability of a 20% adjusted-close drawdown over the next 20 sessions after observing a listing's first 20 sessions.
 
 You have a frozen public-data sample with 84 eligible listings and 42 held-out predictions. The primary model uses regularized logistic regression. You can compare it with a training-event-rate baseline and shallow gradient-boosted trees. You make no position-sizing or investment-return claim.

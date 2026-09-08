@@ -1,0 +1,252 @@
+{
+  "status": "retrospective_diagnostic",
+  "inputs": {
+    "dataset.json.gz": "f0d2aecc8e58cbb3fe1c49a8a4141ec7801650b69f3f44c071f65588026c748d",
+    "results.json.gz": "394634d025e2bfc5774e0a214a2d2690c95676c893854f57109632c41749b3fe",
+    "input.json.gz": "34c96a2672c21879e36976b07415befa614c79e352d4638d6784fd595e0e9669"
+  },
+  "ranking_selection": "Use the features and directions from the review: negative log offer price and positive daily volatility. These are post-hoc benchmarks; do not describe them as a new held-out test.",
+  "price_basis": "Pre-IPO ratios divide vendor-adjusted closes by nominal offer prices. The frozen normalized input lacks a common share-basis bridge. These are audit proxies, not validated allocator returns.",
+  "stages": {
+    "0": {
+      "held_out": 980,
+      "single_feature": "log_offer_price",
+      "direction": -1,
+      "ranking_cases": 953,
+      "ranking_missing": 27,
+      "single_feature_auc": 0.7049613538504977,
+      "model_aucs_same_cases": {
+        "logistic": 0.7019040728453448,
+        "boosted_trees": 0.6926329674595892,
+        "catboost": 0.6707246594197783,
+        "tabnet": 0.6549772358297452
+      },
+      "return_proxy_cases": 953,
+      "event_cases_with_return_proxy": 496,
+      "events_with_nonnegative_terminal_proxy": 342,
+      "share_events_with_nonnegative_terminal_proxy": 0.6895161290322581,
+      "events_never_below_entry_proxy": 310,
+      "yearly_coverage_event_correlation": 0.8102678934158548,
+      "yearly": [
+        {
+          "year": 2010,
+          "coverage": 0.26627218934911245,
+          "eligible": 44,
+          "event_rate": 0.13636363636363635
+        },
+        {
+          "year": 2011,
+          "coverage": 0.1702127659574468,
+          "eligible": 23,
+          "event_rate": 0.21739130434782608
+        },
+        {
+          "year": 2012,
+          "coverage": 0.2846715328467153,
+          "eligible": 37,
+          "event_rate": 0.05405405405405406
+        },
+        {
+          "year": 2013,
+          "coverage": 0.2857142857142857,
+          "eligible": 63,
+          "event_rate": 0.07936507936507936
+        },
+        {
+          "year": 2014,
+          "coverage": 0.2733812949640288,
+          "eligible": 75,
+          "event_rate": 0.25333333333333335
+        },
+        {
+          "year": 2015,
+          "coverage": 0.26282051282051283,
+          "eligible": 40,
+          "event_rate": 0.275
+        },
+        {
+          "year": 2016,
+          "coverage": 0.4375,
+          "eligible": 41,
+          "event_rate": 0.21951219512195122
+        },
+        {
+          "year": 2017,
+          "coverage": 0.3496932515337423,
+          "eligible": 55,
+          "event_rate": 0.14545454545454545
+        },
+        {
+          "year": 2018,
+          "coverage": 0.5357142857142857,
+          "eligible": 103,
+          "event_rate": 0.27184466019417475
+        },
+        {
+          "year": 2019,
+          "coverage": 0.5212121212121212,
+          "eligible": 82,
+          "event_rate": 0.32926829268292684
+        },
+        {
+          "year": 2020,
+          "coverage": 0.5060240963855421,
+          "eligible": 124,
+          "event_rate": 0.5080645161290323
+        },
+        {
+          "year": 2021,
+          "coverage": 0.48695652173913045,
+          "eligible": 221,
+          "event_rate": 0.5158371040723982
+        },
+        {
+          "year": 2022,
+          "coverage": 0.6947368421052632,
+          "eligible": 64,
+          "event_rate": 0.8125
+        },
+        {
+          "year": 2023,
+          "coverage": 0.6528925619834711,
+          "eligible": 75,
+          "event_rate": 0.5333333333333333
+        },
+        {
+          "year": 2024,
+          "coverage": 0.8313253012048193,
+          "eligible": 135,
+          "event_rate": 0.5185185185185185
+        },
+        {
+          "year": 2025,
+          "coverage": 0.8418604651162791,
+          "eligible": 176,
+          "event_rate": 0.6193181818181818
+        }
+      ],
+      "median_first_close_offer_proxy": 0.27045458013361157,
+      "first_close_offer_proxy_event_correlation": 0.06360341048182919
+    },
+    "20": {
+      "held_out": 964,
+      "single_feature": "daily_volatility",
+      "direction": 1,
+      "ranking_cases": 964,
+      "ranking_missing": 0,
+      "single_feature_auc": 0.7269551742645913,
+      "model_aucs_same_cases": {
+        "logistic": 0.7016292397458317,
+        "boosted_trees": 0.7179757431999585,
+        "logistic_enriched": 0.7182376162196791,
+        "catboost_price": 0.6931973613587963,
+        "catboost": 0.7083253977872811,
+        "tabnet": 0.6960887857748844
+      },
+      "return_proxy_cases": 964,
+      "event_cases_with_return_proxy": 446,
+      "events_with_nonnegative_terminal_proxy": 87,
+      "share_events_with_nonnegative_terminal_proxy": 0.19506726457399104,
+      "events_never_below_entry_proxy": 16,
+      "yearly_coverage_event_correlation": 0.8919956899120195,
+      "yearly": [
+        {
+          "year": 2010,
+          "coverage": 0.26627218934911245,
+          "eligible": 44,
+          "event_rate": 0.13636363636363635
+        },
+        {
+          "year": 2011,
+          "coverage": 0.1702127659574468,
+          "eligible": 23,
+          "event_rate": 0.08695652173913043
+        },
+        {
+          "year": 2012,
+          "coverage": 0.2846715328467153,
+          "eligible": 36,
+          "event_rate": 0.08333333333333333
+        },
+        {
+          "year": 2013,
+          "coverage": 0.2857142857142857,
+          "eligible": 62,
+          "event_rate": 0.0967741935483871
+        },
+        {
+          "year": 2014,
+          "coverage": 0.2733812949640288,
+          "eligible": 75,
+          "event_rate": 0.25333333333333335
+        },
+        {
+          "year": 2015,
+          "coverage": 0.26282051282051283,
+          "eligible": 40,
+          "event_rate": 0.25
+        },
+        {
+          "year": 2016,
+          "coverage": 0.4375,
+          "eligible": 41,
+          "event_rate": 0.1951219512195122
+        },
+        {
+          "year": 2017,
+          "coverage": 0.3496932515337423,
+          "eligible": 55,
+          "event_rate": 0.18181818181818182
+        },
+        {
+          "year": 2018,
+          "coverage": 0.5357142857142857,
+          "eligible": 101,
+          "event_rate": 0.33663366336633666
+        },
+        {
+          "year": 2019,
+          "coverage": 0.5212121212121212,
+          "eligible": 81,
+          "event_rate": 0.345679012345679
+        },
+        {
+          "year": 2020,
+          "coverage": 0.5060240963855421,
+          "eligible": 123,
+          "event_rate": 0.35772357723577236
+        },
+        {
+          "year": 2021,
+          "coverage": 0.48695652173913045,
+          "eligible": 219,
+          "event_rate": 0.4840182648401826
+        },
+        {
+          "year": 2022,
+          "coverage": 0.6947368421052632,
+          "eligible": 62,
+          "event_rate": 0.5967741935483871
+        },
+        {
+          "year": 2023,
+          "coverage": 0.6528925619834711,
+          "eligible": 74,
+          "event_rate": 0.527027027027027
+        },
+        {
+          "year": 2024,
+          "coverage": 0.8313253012048193,
+          "eligible": 134,
+          "event_rate": 0.5373134328358209
+        },
+        {
+          "year": 2025,
+          "coverage": 0.8418604651162791,
+          "eligible": 173,
+          "event_rate": 0.5086705202312138
+        }
+      ]
+    }
+  }
+}

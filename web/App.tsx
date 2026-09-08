@@ -271,7 +271,9 @@ export default function App() {
           <span className="badge">HISTORICAL RESEARCH</span>
           <p>
             You are viewing a curated sample of real listings. These results do
-            not establish performance across the IPO population.
+            not establish performance across the IPO population. You have no
+            validated allocation policy; a peak-to-trough event can occur while
+            your position remains above its entry price.
           </p>
         </div>
         <div className="metric-grid" aria-label="Study summary">

@@ -1,5 +1,7 @@
 # Expanded IPO experiment
 
+You have no demonstrated allocation-policy benefit from this experiment. Read the [decision audit](../decision/README.md) for the one-feature comparisons and entry-price checks. The report command recomputes that audit from the frozen inputs.
+
 You use one row per issuer at each observation stage. You have 1,358 pre-IPO rows and 1,343 day-20 rows from a Field–Ritter registry of 4,497 records dated 2010–2025.
 
 You should read the [measured results](../../docs/CHALLENGER_STUDY.md) before interpreting the model scores. You retain 1,393 price matches from 3,031 in-scope records. Missing histories create survivorship risk, with lower coverage in the earlier years.

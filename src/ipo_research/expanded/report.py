@@ -5,6 +5,7 @@ import sqlite3
 
 import numpy as np
 
+from .decision_audit import audit
 from .evaluate import stats
 from .sources import load_json, save_json, sha
 
@@ -25,6 +26,7 @@ def report(directory: Path):
     result = load_json(directory / "results.json.gz")
     data = load_json(directory / "dataset.json.gz")
     sensitivity = load_json(directory / "coverage-results.json.gz")
+    decision = audit(directory, directory.parent / "decision/audit.json")
     pre, day = result["stages"]["0"], result["stages"]["20"]
     quality = result["quality"]
     # Analysts can reproduce Brier scores with a second calculation engine.
@@ -116,11 +118,41 @@ def report(directory: Path):
                    "I excluded histories with calendar gaps or nonpositive prices/volume. Those exclusions can omit distressed issuers. "
                    "You should treat all observed drawdowns as close-based vendor-adjusted outcomes. "
                    "You have no estimate of intraday loss or trading returns.")
-    next_steps = ("You can retain CatBoost as a challenger and logistic regression as the reference model. "
-                  "For the next research step, obtain delisted-security coverage and dated filing financials, then reserve a new evaluation period before tuning. "
-                  "For an Anthropic case study, you need final offering terms and verified issuer traits to run the pre-IPO model. "
-                  "You can run the day-20 model after twenty observed trading sessions. "
-                  "You still need evidence that either model transfers to a company of Anthropic's scale.")
+    next_steps = ("You have no demonstrated allocation-policy benefit from these classifiers. "
+                  "For the next study, use an allocator who can accept or decline a fixed allocation at the offer price and exit at close 20. "
+                  "You need continuous entry-based returns on a common share basis and dated offering terms before fitting a return model. "
+                  "You should compare expected policy loss with a single-feature policy and with accepting or declining all eligible allocations. "
+                  "For Anthropic, build a table of comparable deal terms and offer-based price paths. "
+                  "You must define the comparable cohort before counting it or inspecting returns. "
+                  "The current study does not validate a model recommendation for Anthropic.")
+    audit_pre, audit_day = decision["stages"]["0"], decision["stages"]["20"]
+    decision_summary = (
+        "You have no demonstrated decision value from this forecast benchmark. "
+        f"On {audit_pre['ranking_cases']} pre-IPO cases with an offer price, I measured AUC of "
+        f"{audit_pre['single_feature_auc']:.3f} for negative log offer price and "
+        f"{audit_pre['model_aucs_same_cases']['logistic']:.3f} for logistic regression on those same cases. "
+        f"On {audit_day['ranking_cases']} day-20 cases, I measured {audit_day['single_feature_auc']:.3f} for realized volatility; "
+        f"the best model AUC was {max(audit_day['model_aucs_same_cases'].values()):.3f}. "
+        "I added these one-feature references after the original evaluation, so you should treat the comparison as a diagnostic. "
+        "AUC describes ranking for the existing drawdown label. It does not establish the expected loss of an allocation policy.")
+    target_audit = (
+        f"I reproduced a nonnegative terminal return proxy for {audit_pre['events_with_nonnegative_terminal_proxy']} "
+        f"of {audit_pre['event_cases_with_return_proxy']} pre-IPO events ({pct(audit_pre['share_events_with_nonnegative_terminal_proxy'])}), "
+        f"and {audit_day['events_with_nonnegative_terminal_proxy']} of {audit_day['event_cases_with_return_proxy']} "
+        f"day-20 events ({pct(audit_day['share_events_with_nonnegative_terminal_proxy'])}). "
+        "You must keep the price bases visible: the pre-IPO proxy divides vendor-adjusted closes by nominal offer prices. "
+        "You need split and distribution accounting on the original offered-share basis before calling that proxy allocator P&L. "
+        "You should also distinguish a terminal recovery from a path that stayed above entry. "
+        f"I measured a median first-close/offer proxy of {pct(audit_pre['median_first_close_offer_proxy'])} "
+        f"and a correlation of {audit_pre['first_close_offer_proxy_event_correlation']:.3f} with the pre-IPO event label. "
+        "The current label measures a decline from a running peak and does not encode loss from the allocation price.")
+    coverage_audit = (
+        f"Across the sixteen IPO years from 2010 to 2025, I measured correlations of "
+        f"{audit_pre['yearly_coverage_event_correlation']:.3f} before the IPO and "
+        f"{audit_day['yearly_coverage_event_correlation']:.3f} at day 20 between price coverage and annual event rate. "
+        "You cannot use these correlations to separate missing-history bias from changes in issuer mix or market conditions. "
+        "The 2018-onward refit below tests dependence on the older cohort; it does not remove survivorship bias.")
+
 
     metric_rows, fold_rows, screening_rows, robustness_rows = [], [], [], []
     for stage, value in result["stages"].items():
@@ -228,6 +260,8 @@ def report(directory: Path):
                     "query": {"engine": "SQLite", "language": "sql", "sql": sensitivity_sql,
                               "description": "Recompute both training cohorts' Brier errors on matching 2020–2025 test issuers. Read training counts from the saved folds and skill from Python evaluation.",
                               "tables_used": ["coverage_forecasts"]}})
+    sources.append({"id": "decision_audit", "label": "Frozen-data decision relevance audit",
+                    "path": "research/decision/audit.json"})
     blocks, charts, tables = [], [], []
 
     def prose(key, heading, body, source="results"):
@@ -240,7 +274,10 @@ def report(directory: Path):
         blocks.append({"id": key + "-block", "type": "table", "tableId": key, "layout": "full"})
 
     blocks.append({"id": "title", "type": "markdown", "body": f"# {title}"})
-    prose("summary", "CatBoost has modest aggregate gains", summary)
+    prose("decision-summary", "You have no demonstrated allocation-policy benefit", decision_summary, "decision_audit")
+    prose("entry-target", "You need entry-based outcomes for an allocator", target_audit, "decision_audit")
+    prose("coverage-audit", "Coverage and event rates change together", coverage_audit, "decision_audit")
+    prose("summary", "You can inspect the historical forecast comparison", summary)
     prose("definitions", "You compare forecasts within each stage", definitions, "protocol")
     for stage, dataset in (("Pre-IPO", "pre_metrics"), ("Day 20", "day_metrics")):
         prose(dataset + "-intro", f"{stage} model comparison",
@@ -292,7 +329,7 @@ def report(directory: Path):
            ("skill_50", "Skill vs 50%"), ("n", "Cases")], "stage")
     prose("rendering", "You need the external plugin to rebuild HTML", rendering)
     prose("limits", "You need stronger evidence for population claims", limitations)
-    prose("next", "You can retain the challengers for the next study", next_steps)
+    prose("next", "You need an allocator study before recommending an action", next_steps)
     artifact = {"surface": "report", "manifest": {"version": 1, "surface": "report", "title": title,
                   "generatedAt": result["generated_at"], "blocks": blocks, "charts": charts, "tables": tables, "sources": sources},
                 "snapshot": {"version": 1, "status": "ready", "generatedAt": result["generated_at"], "datasets": {
@@ -303,6 +340,8 @@ def report(directory: Path):
     save_json(directory / "report-artifact.json", artifact)
     save_json(directory / "report-notes.json", {"results_sha256": sha(directory / "results.json.gz"),
               "coverage_results_sha256": sha(directory / "coverage-results.json.gz"),
+              "decision_audit": "research/decision/audit.json; methods in expanded/decision_audit.py; executed companion research/decision/audit.ipynb",
+              "decision_audit_visual": "Exact comparisons remain in prose because the two stages have different complete-case denominators. The existing full model tables remain below.",
               "html_regeneration": rendering, "audience": "technical", "delivery": "html", "structure": "Definitions precede comparisons. Next steps include transfer questions.",
               "charts": "Use separate Brier bars for the two targets and a coverage line across sixteen IPO years. Tables preserve exact values.",
               "subgroup_selection": "Offer price >= $10 is a post-hoc cohort diagnostic; no refitting or parameter changes.",
@@ -311,7 +350,7 @@ def report(directory: Path):
         return "\n".join(["| " + " | ".join(headers) + " |", "|" + "---|" * len(headers),
                           *["| " + " | ".join(str(cell) for cell in row) + " |" for row in rows]])
 
-    lines = [f"# {title}", summary, "## Targets", definitions, "## Held-out results",
+    lines = [f"# {title}", "## Decision relevance audit", decision_summary, "## Entry-based outcomes", target_audit, "## Coverage association", coverage_audit, "## Historical forecast comparison", summary, "## Targets", definitions, "## Held-out results",
              markdown_table(["Stage", "Model", "Brier", "Skill vs train rate", "Skill vs 50%", "ROC-AUC", "Test cases"],
                             [[r[k] for k in ("stage", "model", "brier_display", "brier_skill", "skill_50", "auc", "n")]
                              for r in metric_rows]),

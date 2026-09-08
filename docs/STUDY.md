@@ -1,5 +1,7 @@
 # Study and interview guide
 
+You can demonstrate forecast evaluation and its limits. You have no validated allocation policy. The [decision audit](../research/decision/README.md) explains the single-feature comparisons and the mismatch between peak-to-trough events and entry-based losses.
+
 You can demonstrate a completed retrospective risk study on a curated sample of real listings. You can reproduce the predictions from the bundled input, then inspect the model settings and held-out outcomes in the dashboard.
 
 **Scope and target**

@@ -1,6 +1,8 @@
 {
   "results_sha256": "394634d025e2bfc5774e0a214a2d2690c95676c893854f57109632c41749b3fe",
   "coverage_results_sha256": "4ec90be458c5cad52591589a80902b96ad7ab718bfd91f2e493146a8915bc437",
+  "decision_audit": "research/decision/audit.json; methods in expanded/decision_audit.py; executed companion research/decision/audit.ipynb",
+  "decision_audit_visual": "Exact comparisons remain in prose because the two stages have different complete-case denominators. The existing full model tables remain below.",
   "html_regeneration": "You can regenerate Markdown and report-artifact.json with the repository's report command. To regenerate CHALLENGER_REPORT.html, you need an installed external Data Analytics plugin. You pass its directory to `node research/expanded/render_report.mjs`. The wrapper imports build-report scripts and the packaged reader from that plugin path; the repository does not include those dependencies. You can open the committed HTML without the plugin.",
   "audience": "technical",
   "delivery": "html",
