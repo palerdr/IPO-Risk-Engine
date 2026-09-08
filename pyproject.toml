@@ -3,13 +3,29 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "ipo-risk-engine"
-version = "0.1.0"
-description = "Event-driven IPO risk analysis engine"
-requires-python = ">=3.10"
+name = "ipo-research"
+version = "2.0.0"
+description = "Chronological IPO drawdown research and historical replay"
+requires-python = ">=3.11"
+dependencies = ["numpy>=2.2", "scikit-learn>=1.6"]
+
+[project.scripts]
+ipo-research = "ipo_research.__main__:main"
+ipo-challengers = "ipo_research.expanded.__main__:main"
+
+[project.optional-dependencies]
+challengers = [
+    "beautifulsoup4>=4.15.0",
+    "catboost>=1.2.10",
+    "pytorch-tabnet>=4.1.0",
+    "xlrd>=2.0.2",
+]
 
 [tool.setuptools]
 package-dir = {"" = "src"}
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+"ipo_research.expanded" = ["*.sql"]

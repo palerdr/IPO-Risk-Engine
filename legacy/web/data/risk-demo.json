@@ -1,0 +1,21 @@
+{
+  "data": "Synthetic prices; this run demonstrates code execution, not investment performance.",
+  "seed": 42,
+  "rows": {
+    "train": 48,
+    "validation": 16,
+    "test": 16
+  },
+  "features": 33,
+  "calibrator": "binned",
+  "policy": "Fixed default thresholds; no claim of a validated risk constraint.",
+  "actions": {
+    "SIZE_UP": 9,
+    "SMALL_BET": 7
+  },
+  "example": {
+    "symbol": "SYNTHETIC_64",
+    "adverse_probability": 0.181818,
+    "action": "SIZE_UP"
+  }
+}

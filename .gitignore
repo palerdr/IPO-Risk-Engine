@@ -38,3 +38,12 @@ progress.txt
 V1_2_PLAN.md
 PRD.md
 CLAUDE.md
+
+# Re-fetchable upstream response cache; keep research/input.json for offline runs
+research/raw/
+research/expanded/raw/
+research/expanded/download-ledger.json
+research/expanded/*-progress.json
+
+catboost_info/
+research/expanded/audit.sqlite3

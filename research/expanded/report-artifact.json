@@ -1,0 +1,1335 @@
+{
+  "surface": "report",
+  "manifest": {
+    "version": 1,
+    "surface": "report",
+    "title": "IPO challenger study",
+    "generatedAt": "2026-09-08T00:01:22.859503+00:00",
+    "blocks": [
+      {
+        "id": "title",
+        "type": "markdown",
+        "body": "# IPO challenger study"
+      },
+      {
+        "id": "summary",
+        "type": "markdown",
+        "body": "## CatBoost has modest aggregate gains\n\nI trained CatBoost and TabNet for pre-IPO and day-20 drawdown forecasts. Across 980 pre-IPO test cases, I measured CatBoost Brier error of 0.2437, versus 0.2572 for logistic regression. Across 964 day-20 test cases, I measured 0.2212 for CatBoost with issuer traits and 0.2265 for the original logistic benchmark. You should treat these as point-estimate gains: both paired confidence intervals include zero. I measured higher aggregate error for TabNet in both stages. After restricting training to listings from 2018 onward, I measured pre-IPO Brier error of 0.2352 for logistic regression and 0.2501 for CatBoost on the same 795 test cases from 2020\u20132025.",
+        "sourceId": "results"
+      },
+      {
+        "id": "definitions",
+        "type": "markdown",
+        "body": "## You compare forecasts within each stage\n\nYou predict a maximum adjusted-close peak-to-trough decline of at least 20%. For pre-IPO forecasts, you score after final pricing and before the first trade, then measure the first 20 closing prices. For day-20 forecasts, you score at the twentieth close and measure the next 20 sessions, including that close as the initial peak. You compare models within each stage because the two targets cover different price windows. You read Brier error as mean squared probability error, with lower values indicating better forecasts. You read ROC-AUC as ranking quality, with higher values indicating better separation. You calculate Brier skill as 1 minus model Brier divided by reference Brier on the same test rows. You compare against each fold's training event rate and against a constant 50% forecast (Brier 0.2500). Positive skill means lower error than that reference; negative skill means higher error.",
+        "sourceId": "protocol"
+      },
+      {
+        "id": "pre_metrics-intro",
+        "type": "markdown",
+        "body": "## Pre-IPO model comparison\n\nYou can compare probability error in the bars and inspect ranking quality in the table. You should prefer a model only after reviewing its period results and uncertainty.",
+        "sourceId": "results"
+      },
+      {
+        "id": "pre_metrics-chart",
+        "type": "chart",
+        "chartId": "pre_metrics",
+        "layout": "full"
+      },
+      {
+        "id": "pre_metrics-table-block",
+        "type": "table",
+        "tableId": "pre_metrics-table",
+        "layout": "full"
+      },
+      {
+        "id": "day_metrics-intro",
+        "type": "markdown",
+        "body": "## Day 20 model comparison\n\nYou can compare probability error in the bars and inspect ranking quality in the table. You should prefer a model only after reviewing its period results and uncertainty.",
+        "sourceId": "results"
+      },
+      {
+        "id": "day_metrics-chart",
+        "type": "chart",
+        "chartId": "day_metrics",
+        "layout": "full"
+      },
+      {
+        "id": "day_metrics-table-block",
+        "type": "table",
+        "tableId": "day_metrics-table",
+        "layout": "full"
+      },
+      {
+        "id": "uncertainty",
+        "type": "markdown",
+        "body": "## You have no clear improvement over logistic regression\n\nI measured a CatBoost-minus-logistic Brier difference of -0.0135 before the IPO, with a 95% interval of [-0.0328, +0.0040]. For day 20, I measured -0.0053, with an interval of [-0.0158, +0.0050]. I used 2,000 paired resamples of calendar-quarter blocks. You should read these as conditional intervals for the retained cohort; they omit uncertainty from missing issuers and model selection. A fixed 50% forecast has Brier error of 0.2500. That reference limits the strength of the pre-IPO result. For pre-IPO CatBoost, I measured mean probability of 42.3% against an event rate of 51.3%. You should inspect calibration before using a probability threshold.",
+        "sourceId": "results"
+      },
+      {
+        "id": "coverage",
+        "type": "markdown",
+        "body": "## Missing price histories limit the cohort\n\nI started from 4,497 Field\u2013Ritter records dated 2010\u20132025. After scope exclusions, I requested prices for 3,031 records and matched 1,393 (46.0%). I retained 1,358 pre-IPO observations and 1,343 day-20 observations after calendar and price checks. I verified listing dates against an extra dated registry source for 1,315 pre-IPO observations. You have broader historical coverage than the MVP, but missing histories can cause survivorship bias. You cannot extend these scores to the complete IPO population.",
+        "sourceId": "results"
+      },
+      {
+        "id": "coverage-chart",
+        "type": "chart",
+        "chartId": "coverage",
+        "layout": "full"
+      },
+      {
+        "id": "coverage-table-block",
+        "type": "table",
+        "tableId": "coverage-table",
+        "layout": "full"
+      },
+      {
+        "id": "features",
+        "type": "markdown",
+        "body": "## You use dated market data and historical issuer traits\n\nFor pre-IPO models, you use seven numeric features and three categorical features: log offer price, age capped at 80 years, the preceding 90-day IPO count, preceding market returns over 20 and 60 sessions, 20-session market volatility, 60-session market drawdown, ADR status, venture backing, and dual-class status. For day-20 challengers, you add the original eight price/volume and market features. You can compare price-only CatBoost with enriched logistic regression to separate feature changes from model changes. I omitted underwriters from the common feature view because the public workbook ends in September 2020. I excluded filing financial statements and the stale internet flag. You have an offer-terms and issuer-traits model.",
+        "sourceId": "protocol"
+      },
+      {
+        "id": "methods",
+        "type": "markdown",
+        "body": "## You select challengers before the outer test period\n\nI used four expanding test blocks: 2018\u20132019, 2020\u20132021, 2022\u20132023, and 2024\u20132025. For each block, I excluded training cases whose outcome window reached the test period. I kept one observation per issuer within each stage and fitted preprocessing on training rows. For each challenger, I selected one of three configurations using an inner chronological validation split. I used validation Brier error for configuration selection and early stopping, then refitted on the mature outer training set. I averaged predictions from seeds 42, 137, and 2026. I used no class reweighting or post-hoc calibrator.",
+        "sourceId": "protocol"
+      },
+      {
+        "id": "periods",
+        "type": "markdown",
+        "body": "## You get different rankings across periods\n\nYou get different rankings across periods. In 2022\u20132025, I measured day-20 Brier error of 0.1921 for enriched logistic regression and 0.2085 for enriched CatBoost. For the final two blocks in the pre-IPO study, validation selected a one-tree CatBoost fit. You should interpret that result as a near-constant forecast, with little evidence of useful nonlinear structure in that period. You can inspect the seed scores and selected training lengths in the saved fold records.",
+        "sourceId": "results"
+      },
+      {
+        "id": "fold-table-block",
+        "type": "table",
+        "tableId": "fold-table",
+        "layout": "full"
+      },
+      {
+        "id": "screening",
+        "type": "markdown",
+        "body": "## High recall requires broad flagging\n\nAt the fixed 30% threshold, you flag most listings with CatBoost. You should compare the fraction flagged with precision and missed severe events. Here, a severe event means a drawdown of at least 30%. You have a risk-screening diagnostic, with no trading-policy validation.",
+        "sourceId": "results"
+      },
+      {
+        "id": "screening-table-block",
+        "type": "table",
+        "tableId": "screening-table",
+        "layout": "full"
+      },
+      {
+        "id": "robustness",
+        "type": "markdown",
+        "body": "## You can inspect cohort sensitivity\n\nI excluded prior MVP listings from one sensitivity cut because you have seen some of their outcomes. I added the offer-price cut after viewing the aggregate results to inspect cohort mix. You should treat that cut as a diagnostic; I used no subgroup score for model selection.",
+        "sourceId": "results"
+      },
+      {
+        "id": "robustness-table-block",
+        "type": "table",
+        "tableId": "robustness-table",
+        "layout": "full"
+      },
+      {
+        "id": "coverage-sensitivity",
+        "type": "markdown",
+        "body": "## You can compare training coverage\n\nI matched prices for 388 of 1,364 in-scope listings from 2010\u20132017 (28.4%), and 1,005 of 1,667 from 2018\u20132025 (60.3%). At your request, I added a post-hoc sensitivity that trains on listings from 2018 onward. I retained the candidate grids and inner validation rules, then refitted the models for each test block. You compare both training cohorts on identical 2020\u20132025 held-out issuers. You read a negative Brier change as lower error for the restricted training cohort. You can assess dependence on the earlier cohort, but this restriction also changes sample size and market regimes. You cannot isolate the effect of missing histories or remove survivorship bias with this comparison.",
+        "sourceId": "coverage_sensitivity"
+      },
+      {
+        "id": "coverage-training-table-block",
+        "type": "table",
+        "tableId": "coverage-training-table",
+        "layout": "full"
+      },
+      {
+        "id": "coverage-sensitivity-table-block",
+        "type": "table",
+        "tableId": "coverage-sensitivity-table",
+        "layout": "full"
+      },
+      {
+        "id": "coverage-skill-table-block",
+        "type": "table",
+        "tableId": "coverage-skill-table",
+        "layout": "full"
+      },
+      {
+        "id": "rendering",
+        "type": "markdown",
+        "body": "## You need the external plugin to rebuild HTML\n\nYou can regenerate Markdown and report-artifact.json with the repository's report command. To regenerate CHALLENGER_REPORT.html, you need an installed external Data Analytics plugin. You pass its directory to `node research/expanded/render_report.mjs`. The wrapper imports build-report scripts and the packaged reader from that plugin path; the repository does not include those dependencies. You can open the committed HTML without the plugin.",
+        "sourceId": "results"
+      },
+      {
+        "id": "limits",
+        "type": "markdown",
+        "body": "## You need stronger evidence for population claims\n\nYou use current research compilations of IPO-time facts. The sources do not provide an archived publication timestamp for each feature. You therefore have a retrospective reconstruction, with code-enforced market-data cutoffs. I screened acquisition companies with name and unit-ticker rules; those rules leave security-type classification risk. I excluded histories with calendar gaps or nonpositive prices/volume. Those exclusions can omit distressed issuers. You should treat all observed drawdowns as close-based vendor-adjusted outcomes. You have no estimate of intraday loss or trading returns.",
+        "sourceId": "results"
+      },
+      {
+        "id": "next",
+        "type": "markdown",
+        "body": "## You can retain the challengers for the next study\n\nYou can retain CatBoost as a challenger and logistic regression as the reference model. For the next research step, obtain delisted-security coverage and dated filing financials, then reserve a new evaluation period before tuning. For an Anthropic case study, you need final offering terms and verified issuer traits to run the pre-IPO model. You can run the day-20 model after twenty observed trading sessions. You still need evidence that either model transfers to a company of Anthropic's scale.",
+        "sourceId": "results"
+      }
+    ],
+    "charts": [
+      {
+        "id": "pre_metrics",
+        "type": "bar",
+        "title": "Pre-IPO Brier error",
+        "dataset": "pre_metrics",
+        "sourceId": "results",
+        "encodings": {
+          "x": {
+            "field": "model",
+            "type": "nominal",
+            "label": "Model"
+          },
+          "y": {
+            "field": "brier",
+            "type": "quantitative",
+            "label": "Brier error"
+          }
+        },
+        "layout": "full"
+      },
+      {
+        "id": "day_metrics",
+        "type": "bar",
+        "title": "Day 20 Brier error",
+        "dataset": "day_metrics",
+        "sourceId": "results",
+        "encodings": {
+          "x": {
+            "field": "model",
+            "type": "nominal",
+            "label": "Model"
+          },
+          "y": {
+            "field": "brier",
+            "type": "quantitative",
+            "label": "Brier error"
+          }
+        },
+        "layout": "full"
+      },
+      {
+        "id": "coverage",
+        "type": "line",
+        "title": "Price-history coverage by IPO year",
+        "dataset": "coverage",
+        "sourceId": "coverage_source",
+        "valueFormat": "percent",
+        "encodings": {
+          "x": {
+            "field": "year",
+            "type": "ordinal",
+            "label": "IPO year"
+          },
+          "y": {
+            "field": "coverage",
+            "type": "quantitative",
+            "label": "Share of in-scope registry"
+          }
+        }
+      }
+    ],
+    "tables": [
+      {
+        "id": "pre_metrics-table",
+        "title": "Pre-IPO metrics",
+        "dataset": "pre_metrics",
+        "sourceId": "results",
+        "defaultSort": {
+          "field": "brier_display",
+          "direction": "asc"
+        },
+        "columns": [
+          {
+            "field": "model",
+            "label": "Model"
+          },
+          {
+            "field": "brier_display",
+            "label": "Brier"
+          },
+          {
+            "field": "brier_skill",
+            "label": "Skill vs train rate"
+          },
+          {
+            "field": "skill_50",
+            "label": "Skill vs 50%"
+          },
+          {
+            "field": "auc",
+            "label": "ROC-AUC"
+          },
+          {
+            "field": "n",
+            "label": "Cases"
+          }
+        ]
+      },
+      {
+        "id": "day_metrics-table",
+        "title": "Day 20 metrics",
+        "dataset": "day_metrics",
+        "sourceId": "results",
+        "defaultSort": {
+          "field": "brier_display",
+          "direction": "asc"
+        },
+        "columns": [
+          {
+            "field": "model",
+            "label": "Model"
+          },
+          {
+            "field": "brier_display",
+            "label": "Brier"
+          },
+          {
+            "field": "brier_skill",
+            "label": "Skill vs train rate"
+          },
+          {
+            "field": "skill_50",
+            "label": "Skill vs 50%"
+          },
+          {
+            "field": "auc",
+            "label": "ROC-AUC"
+          },
+          {
+            "field": "n",
+            "label": "Cases"
+          }
+        ]
+      },
+      {
+        "id": "coverage-table",
+        "title": "Cohort coverage",
+        "dataset": "coverage",
+        "sourceId": "results",
+        "defaultSort": {
+          "field": "year",
+          "direction": "asc"
+        },
+        "columns": [
+          {
+            "field": "year",
+            "label": "IPO year"
+          },
+          {
+            "field": "in_scope",
+            "label": "In scope"
+          },
+          {
+            "field": "matched",
+            "label": "Price matched"
+          },
+          {
+            "field": "pre",
+            "label": "Pre-IPO usable"
+          },
+          {
+            "field": "day",
+            "label": "Day-20 usable"
+          }
+        ]
+      },
+      {
+        "id": "fold-table",
+        "title": "Brier error by test period",
+        "dataset": "folds",
+        "sourceId": "results",
+        "defaultSort": {
+          "field": "period",
+          "direction": "asc"
+        },
+        "columns": [
+          {
+            "field": "stage",
+            "label": "Stage"
+          },
+          {
+            "field": "period",
+            "label": "Test period"
+          },
+          {
+            "field": "test",
+            "label": "Cases"
+          },
+          {
+            "field": "logistic",
+            "label": "Logistic"
+          },
+          {
+            "field": "catboost",
+            "label": "CatBoost"
+          },
+          {
+            "field": "tabnet",
+            "label": "TabNet"
+          }
+        ]
+      },
+      {
+        "id": "screening-table",
+        "title": "Screening at a 30% probability cutoff",
+        "dataset": "screening",
+        "sourceId": "results",
+        "defaultSort": {
+          "field": "stage",
+          "direction": "asc"
+        },
+        "columns": [
+          {
+            "field": "stage",
+            "label": "Stage"
+          },
+          {
+            "field": "model",
+            "label": "Model"
+          },
+          {
+            "field": "flagged",
+            "label": "Flagged"
+          },
+          {
+            "field": "precision",
+            "label": "Precision"
+          },
+          {
+            "field": "recall",
+            "label": "Recall"
+          },
+          {
+            "field": "severe_missed",
+            "label": "Severe events missed"
+          }
+        ]
+      },
+      {
+        "id": "robustness-table",
+        "title": "Brier error on sensitivity subsets",
+        "dataset": "robustness",
+        "sourceId": "results",
+        "defaultSort": {
+          "field": "stage",
+          "direction": "asc"
+        },
+        "columns": [
+          {
+            "field": "stage",
+            "label": "Stage"
+          },
+          {
+            "field": "segment",
+            "label": "Subset"
+          },
+          {
+            "field": "n",
+            "label": "Cases"
+          },
+          {
+            "field": "logistic",
+            "label": "Logistic"
+          },
+          {
+            "field": "catboost",
+            "label": "CatBoost"
+          },
+          {
+            "field": "tabnet",
+            "label": "TabNet"
+          }
+        ]
+      },
+      {
+        "id": "coverage-training-table",
+        "title": "Training cohort sizes",
+        "dataset": "coverage_training",
+        "sourceId": "coverage_sensitivity",
+        "defaultSort": {
+          "field": "period",
+          "direction": "asc"
+        },
+        "columns": [
+          {
+            "field": "stage",
+            "label": "Stage"
+          },
+          {
+            "field": "period",
+            "label": "Test period"
+          },
+          {
+            "field": "main",
+            "label": "Train from 2010"
+          },
+          {
+            "field": "restricted",
+            "label": "Train from 2018"
+          },
+          {
+            "field": "n",
+            "label": "Test cases"
+          }
+        ]
+      },
+      {
+        "id": "coverage-sensitivity-table",
+        "title": "Brier error on matched 2020\u20132025 test cases",
+        "dataset": "coverage_sensitivity",
+        "sourceId": "coverage_sensitivity",
+        "defaultSort": {
+          "field": "stage",
+          "direction": "asc"
+        },
+        "columns": [
+          {
+            "field": "stage",
+            "label": "Stage"
+          },
+          {
+            "field": "model",
+            "label": "Model"
+          },
+          {
+            "field": "main",
+            "label": "Train from 2010"
+          },
+          {
+            "field": "restricted",
+            "label": "Train from 2018"
+          },
+          {
+            "field": "change",
+            "label": "Change"
+          }
+        ]
+      },
+      {
+        "id": "coverage-skill-table",
+        "title": "Brier skill after training from 2018",
+        "dataset": "coverage_sensitivity",
+        "sourceId": "coverage_sensitivity",
+        "defaultSort": {
+          "field": "stage",
+          "direction": "asc"
+        },
+        "columns": [
+          {
+            "field": "stage",
+            "label": "Stage"
+          },
+          {
+            "field": "model",
+            "label": "Model"
+          },
+          {
+            "field": "brier_skill",
+            "label": "Skill vs train rate"
+          },
+          {
+            "field": "skill_50",
+            "label": "Skill vs 50%"
+          },
+          {
+            "field": "n",
+            "label": "Cases"
+          }
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "results",
+        "label": "Frozen challenger forecasts and evaluation",
+        "path": "research/expanded/results.json.gz",
+        "query": {
+          "engine": "SQLite",
+          "language": "sql",
+          "description": "Recompute Brier error and event counts from the frozen model forecasts in research/expanded/audit.sqlite3. Compare against Python evaluation; retain ranking metrics and uncertainty from results.json.gz.",
+          "sql": "SELECT stage, model,\n       COUNT(*) AS test_cases,\n       SUM(event) AS events,\n       AVG((probability - event) * (probability - event)) AS brier,\n       AVG(probability) AS mean_probability\nFROM forecasts\nGROUP BY stage, model\nORDER BY stage, brier;\n",
+          "tables_used": [
+            "forecasts"
+          ],
+          "executed_at": "2026-09-08T00:01:22.859503+00:00"
+        }
+      },
+      {
+        "id": "coverage_source",
+        "label": "Registry and price-coverage reconciliation",
+        "path": "research/expanded/audit.sqlite3",
+        "query": {
+          "engine": "SQLite",
+          "language": "sql",
+          "sql": "SELECT year, SUM(in_scope) AS in_scope, SUM(matched) AS matched, 1.0 * SUM(matched) / SUM(in_scope) AS coverage FROM registry_coverage GROUP BY year ORDER BY year",
+          "description": "Count in-scope Field\u2013Ritter registry rows and accepted Yahoo price matches by year.",
+          "tables_used": [
+            "registry_coverage"
+          ]
+        }
+      },
+      {
+        "id": "registry",
+        "label": "Field\u2013Ritter issuer registry and source audit",
+        "path": "research/expanded/universe.json.gz",
+        "href": "https://site.warrington.ufl.edu/ritter/ipo-data/"
+      },
+      {
+        "id": "protocol",
+        "label": "Frozen training and evaluation protocol",
+        "path": "research/expanded/protocol.json"
+      },
+      {
+        "id": "coverage_sensitivity",
+        "label": "Training coverage sensitivity on shared test issuers",
+        "path": "research/expanded/coverage-results.json.gz",
+        "query": {
+          "engine": "SQLite",
+          "language": "sql",
+          "sql": "SELECT cohort, stage, model, COUNT(*) AS cases, AVG((probability-event)*(probability-event)) AS brier FROM coverage_forecasts GROUP BY cohort, stage, model",
+          "description": "Recompute both training cohorts' Brier errors on matching 2020\u20132025 test issuers. Read training counts from the saved folds and skill from Python evaluation.",
+          "tables_used": [
+            "coverage_forecasts"
+          ]
+        }
+      }
+    ]
+  },
+  "snapshot": {
+    "version": 1,
+    "status": "ready",
+    "generatedAt": "2026-09-08T00:01:22.859503+00:00",
+    "datasets": {
+      "pre_metrics": [
+        {
+          "stage": "Pre-IPO",
+          "model": "Training rate",
+          "brier": 0.30154855241848216,
+          "brier_display": "0.3015",
+          "auc": "0.6027",
+          "ap": "0.5694",
+          "log_loss": "0.8146",
+          "brier_skill": "0.0%",
+          "skill_50": "-20.6%",
+          "n": 980,
+          "events": 503,
+          "difference_ci": "[+0.0253, +0.0596]"
+        },
+        {
+          "stage": "Pre-IPO",
+          "model": "Logistic",
+          "brier": 0.2572082792393477,
+          "brier_display": "0.2572",
+          "auc": "0.7048",
+          "ap": "0.6726",
+          "log_loss": "0.7166",
+          "brier_skill": "14.7%",
+          "skill_50": "-2.9%",
+          "n": 980,
+          "events": 503,
+          "difference_ci": "[+0.0000, +0.0000]"
+        },
+        {
+          "stage": "Pre-IPO",
+          "model": "Boosted trees",
+          "brier": 0.26441669308605004,
+          "brier_display": "0.2644",
+          "auc": "0.6941",
+          "ap": "0.6737",
+          "log_loss": "0.7352",
+          "brier_skill": "12.3%",
+          "skill_50": "-5.8%",
+          "n": 980,
+          "events": 503,
+          "difference_ci": "[-0.0058, +0.0195]"
+        },
+        {
+          "stage": "Pre-IPO",
+          "model": "CatBoost + traits",
+          "brier": 0.2437446042968198,
+          "brier_display": "0.2437",
+          "auc": "0.6678",
+          "ap": "0.6625",
+          "log_loss": "0.6801",
+          "brier_skill": "19.2%",
+          "skill_50": "2.5%",
+          "n": 980,
+          "events": 503,
+          "difference_ci": "[-0.0328, +0.0040]"
+        },
+        {
+          "stage": "Pre-IPO",
+          "model": "TabNet + traits",
+          "brier": 0.2683428573964425,
+          "brier_display": "0.2683",
+          "auc": "0.6603",
+          "ap": "0.6574",
+          "log_loss": "0.7445",
+          "brier_skill": "11.0%",
+          "skill_50": "-7.3%",
+          "n": 980,
+          "events": 503,
+          "difference_ci": "[-0.0039, +0.0246]"
+        }
+      ],
+      "day_metrics": [
+        {
+          "stage": "Day 20",
+          "model": "Training rate",
+          "brier": 0.284654917915513,
+          "brier_display": "0.2847",
+          "auc": "0.5783",
+          "ap": "0.5068",
+          "log_loss": "0.7770",
+          "brier_skill": "0.0%",
+          "skill_50": "-13.9%",
+          "n": 964,
+          "events": 446,
+          "difference_ci": "[+0.0397, +0.0762]"
+        },
+        {
+          "stage": "Day 20",
+          "model": "Logistic",
+          "brier": 0.22649303475801125,
+          "brier_display": "0.2265",
+          "auc": "0.7016",
+          "ap": "0.6764",
+          "log_loss": "0.6658",
+          "brier_skill": "20.4%",
+          "skill_50": "9.4%",
+          "n": 964,
+          "events": 446,
+          "difference_ci": "[+0.0000, +0.0000]"
+        },
+        {
+          "stage": "Day 20",
+          "model": "Boosted trees",
+          "brier": 0.222844073824115,
+          "brier_display": "0.2228",
+          "auc": "0.7180",
+          "ap": "0.6856",
+          "log_loss": "0.6387",
+          "brier_skill": "21.7%",
+          "skill_50": "10.9%",
+          "n": 964,
+          "events": 446,
+          "difference_ci": "[-0.0127, +0.0048]"
+        },
+        {
+          "stage": "Day 20",
+          "model": "Logistic + traits",
+          "brier": 0.22378716323825254,
+          "brier_display": "0.2238",
+          "auc": "0.7182",
+          "ap": "0.6815",
+          "log_loss": "0.6558",
+          "brier_skill": "21.4%",
+          "skill_50": "10.5%",
+          "n": 964,
+          "events": 446,
+          "difference_ci": "[-0.0097, +0.0042]"
+        },
+        {
+          "stage": "Day 20",
+          "model": "CatBoost prices",
+          "brier": 0.22063604881478902,
+          "brier_display": "0.2206",
+          "auc": "0.6932",
+          "ap": "0.6599",
+          "log_loss": "0.6283",
+          "brier_skill": "22.5%",
+          "skill_50": "11.7%",
+          "n": 964,
+          "events": 446,
+          "difference_ci": "[-0.0163, +0.0049]"
+        },
+        {
+          "stage": "Day 20",
+          "model": "CatBoost + traits",
+          "brier": 0.2211546786125481,
+          "brier_display": "0.2212",
+          "auc": "0.7083",
+          "ap": "0.6749",
+          "log_loss": "0.6308",
+          "brier_skill": "22.3%",
+          "skill_50": "11.5%",
+          "n": 964,
+          "events": 446,
+          "difference_ci": "[-0.0158, +0.0050]"
+        },
+        {
+          "stage": "Day 20",
+          "model": "TabNet + traits",
+          "brier": 0.23427270352127966,
+          "brier_display": "0.2343",
+          "auc": "0.6961",
+          "ap": "0.6704",
+          "log_loss": "0.6649",
+          "brier_skill": "17.7%",
+          "skill_50": "6.3%",
+          "n": 964,
+          "events": 446,
+          "difference_ci": "[-0.0035, +0.0187]"
+        }
+      ],
+      "coverage": [
+        {
+          "year": 2010,
+          "registry": 198,
+          "in_scope": 169,
+          "matched": 45,
+          "coverage": 0.26627218934911245,
+          "pre": 44,
+          "day": 44
+        },
+        {
+          "year": 2011,
+          "registry": 178,
+          "in_scope": 141,
+          "matched": 24,
+          "coverage": 0.1702127659574468,
+          "pre": 23,
+          "day": 23
+        },
+        {
+          "year": 2012,
+          "registry": 175,
+          "in_scope": 137,
+          "matched": 39,
+          "coverage": 0.2846715328467153,
+          "pre": 37,
+          "day": 36
+        },
+        {
+          "year": 2013,
+          "registry": 255,
+          "in_scope": 224,
+          "matched": 64,
+          "coverage": 0.2857142857142857,
+          "pre": 63,
+          "day": 62
+        },
+        {
+          "year": 2014,
+          "registry": 305,
+          "in_scope": 278,
+          "matched": 76,
+          "coverage": 0.2733812949640288,
+          "pre": 75,
+          "day": 75
+        },
+        {
+          "year": 2015,
+          "registry": 183,
+          "in_scope": 156,
+          "matched": 41,
+          "coverage": 0.26282051282051283,
+          "pre": 40,
+          "day": 40
+        },
+        {
+          "year": 2016,
+          "registry": 113,
+          "in_scope": 96,
+          "matched": 42,
+          "coverage": 0.4375,
+          "pre": 41,
+          "day": 41
+        },
+        {
+          "year": 2017,
+          "registry": 202,
+          "in_scope": 163,
+          "matched": 57,
+          "coverage": 0.3496932515337423,
+          "pre": 55,
+          "day": 55
+        },
+        {
+          "year": 2018,
+          "registry": 243,
+          "in_scope": 196,
+          "matched": 105,
+          "coverage": 0.5357142857142857,
+          "pre": 103,
+          "day": 101
+        },
+        {
+          "year": 2019,
+          "registry": 228,
+          "in_scope": 165,
+          "matched": 86,
+          "coverage": 0.5212121212121212,
+          "pre": 82,
+          "day": 81
+        },
+        {
+          "year": 2020,
+          "registry": 465,
+          "in_scope": 249,
+          "matched": 126,
+          "coverage": 0.5060240963855421,
+          "pre": 124,
+          "day": 123
+        },
+        {
+          "year": 2021,
+          "registry": 1033,
+          "in_scope": 460,
+          "matched": 224,
+          "coverage": 0.48695652173913045,
+          "pre": 221,
+          "day": 219
+        },
+        {
+          "year": 2022,
+          "registry": 182,
+          "in_scope": 95,
+          "matched": 66,
+          "coverage": 0.6947368421052632,
+          "pre": 64,
+          "day": 62
+        },
+        {
+          "year": 2023,
+          "registry": 154,
+          "in_scope": 121,
+          "matched": 79,
+          "coverage": 0.6528925619834711,
+          "pre": 75,
+          "day": 74
+        },
+        {
+          "year": 2024,
+          "registry": 222,
+          "in_scope": 166,
+          "matched": 138,
+          "coverage": 0.8313253012048193,
+          "pre": 135,
+          "day": 134
+        },
+        {
+          "year": 2025,
+          "registry": 361,
+          "in_scope": 215,
+          "matched": 181,
+          "coverage": 0.8418604651162791,
+          "pre": 176,
+          "day": 173
+        }
+      ],
+      "folds": [
+        {
+          "stage": "Pre-IPO",
+          "period": "2018\u20132019",
+          "train": 374,
+          "test": 185,
+          "purged": 4,
+          "train_event_rate": "17.1%",
+          "test_event_rate": "29.7%",
+          "logistic": "0.2266",
+          "catboost": "0.2086",
+          "tabnet": "0.2220"
+        },
+        {
+          "stage": "Pre-IPO",
+          "period": "2020\u20132021",
+          "train": 557,
+          "test": 345,
+          "purged": 6,
+          "train_event_rate": "21.0%",
+          "test_event_rate": "51.3%",
+          "logistic": "0.2798",
+          "catboost": "0.2553",
+          "tabnet": "0.3202"
+        },
+        {
+          "stage": "Pre-IPO",
+          "period": "2022\u20132023",
+          "train": 899,
+          "test": 139,
+          "purged": 9,
+          "train_event_rate": "32.3%",
+          "test_event_rate": "66.2%",
+          "logistic": "0.3256",
+          "catboost": "0.2505",
+          "tabnet": "0.3375"
+        },
+        {
+          "stage": "Pre-IPO",
+          "period": "2024\u20132025",
+          "train": 1045,
+          "test": 311,
+          "purged": 2,
+          "train_event_rate": "37.1%",
+          "test_event_rate": "57.6%",
+          "logistic": "0.2198",
+          "catboost": "0.2488",
+          "tabnet": "0.2075"
+        },
+        {
+          "stage": "Day 20",
+          "period": "2018\u20132019",
+          "train": 368,
+          "test": 180,
+          "purged": 4,
+          "train_event_rate": "16.8%",
+          "test_event_rate": "33.9%",
+          "logistic": "0.2484",
+          "catboost": "0.2192",
+          "tabnet": "0.2437"
+        },
+        {
+          "stage": "Day 20",
+          "period": "2020\u20132021",
+          "train": 548,
+          "test": 339,
+          "purged": 4,
+          "train_event_rate": "22.4%",
+          "test_event_rate": "42.5%",
+          "logistic": "0.2473",
+          "catboost": "0.2388",
+          "tabnet": "0.2531"
+        },
+        {
+          "stage": "Day 20",
+          "period": "2022\u20132023",
+          "train": 875,
+          "test": 143,
+          "purged": 16,
+          "train_event_rate": "29.0%",
+          "test_event_rate": "58.7%",
+          "logistic": "0.1997",
+          "catboost": "0.2379",
+          "tabnet": "0.2377"
+        },
+        {
+          "stage": "Day 20",
+          "period": "2024\u20132025",
+          "train": 1026,
+          "test": 302,
+          "purged": 8,
+          "train_event_rate": "34.0%",
+          "test_event_rate": "52.0%",
+          "logistic": "0.2027",
+          "catboost": "0.1946",
+          "tabnet": "0.2059"
+        }
+      ],
+      "screening": [
+        {
+          "stage": "Pre-IPO",
+          "model": "Logistic",
+          "flagged": 448,
+          "precision": "67.9%",
+          "recall": "60.4%",
+          "severe_missed": "104/307"
+        },
+        {
+          "stage": "Pre-IPO",
+          "model": "CatBoost + traits",
+          "flagged": 815,
+          "precision": "55.6%",
+          "recall": "90.1%",
+          "severe_missed": "22/307"
+        },
+        {
+          "stage": "Pre-IPO",
+          "model": "TabNet + traits",
+          "flagged": 430,
+          "precision": "64.2%",
+          "recall": "54.9%",
+          "severe_missed": "120/307"
+        },
+        {
+          "stage": "Day 20",
+          "model": "Logistic",
+          "flagged": 535,
+          "precision": "58.7%",
+          "recall": "70.4%",
+          "severe_missed": "58/240"
+        },
+        {
+          "stage": "Day 20",
+          "model": "CatBoost + traits",
+          "flagged": 793,
+          "precision": "51.3%",
+          "recall": "91.3%",
+          "severe_missed": "17/240"
+        },
+        {
+          "stage": "Day 20",
+          "model": "TabNet + traits",
+          "flagged": 529,
+          "precision": "58.6%",
+          "recall": "69.5%",
+          "severe_missed": "60/240"
+        }
+      ],
+      "robustness": [
+        {
+          "stage": "Pre-IPO",
+          "segment": "Exclude prior MVP listings",
+          "n": 900,
+          "logistic": "0.2667",
+          "catboost": "0.2435",
+          "tabnet": "0.2788"
+        },
+        {
+          "stage": "Pre-IPO",
+          "segment": "IPO offer price >= $10",
+          "n": 610,
+          "logistic": "0.2413",
+          "catboost": "0.2350",
+          "tabnet": "0.2523"
+        },
+        {
+          "stage": "Day 20",
+          "segment": "Exclude prior MVP listings",
+          "n": 884,
+          "logistic": "0.2327",
+          "catboost": "0.2272",
+          "tabnet": "0.2410"
+        },
+        {
+          "stage": "Day 20",
+          "segment": "IPO offer price >= $10",
+          "n": 604,
+          "logistic": "0.2274",
+          "catboost": "0.2177",
+          "tabnet": "0.2243"
+        }
+      ],
+      "coverage_training": [
+        {
+          "stage": "Pre-IPO",
+          "period": "2020\u20132021",
+          "main": 557,
+          "restricted": 179,
+          "n": 345
+        },
+        {
+          "stage": "Pre-IPO",
+          "period": "2022\u20132023",
+          "main": 899,
+          "restricted": 521,
+          "n": 139
+        },
+        {
+          "stage": "Pre-IPO",
+          "period": "2024\u20132025",
+          "main": 1045,
+          "restricted": 667,
+          "n": 311
+        },
+        {
+          "stage": "Day 20",
+          "period": "2020\u20132021",
+          "main": 548,
+          "restricted": 172,
+          "n": 339
+        },
+        {
+          "stage": "Day 20",
+          "period": "2022\u20132023",
+          "main": 875,
+          "restricted": 499,
+          "n": 143
+        },
+        {
+          "stage": "Day 20",
+          "period": "2024\u20132025",
+          "main": 1026,
+          "restricted": 650,
+          "n": 302
+        }
+      ],
+      "coverage_sensitivity": [
+        {
+          "stage": "Pre-IPO",
+          "model": "Training rate",
+          "n": 795,
+          "main": "0.3194",
+          "restricted": "0.2771",
+          "change": "-0.0423",
+          "brier_skill": "0.0%",
+          "skill_50": "-10.8%"
+        },
+        {
+          "stage": "Pre-IPO",
+          "model": "Logistic",
+          "n": 795,
+          "main": "0.2643",
+          "restricted": "0.2352",
+          "change": "-0.0291",
+          "brier_skill": "15.1%",
+          "skill_50": "5.9%"
+        },
+        {
+          "stage": "Pre-IPO",
+          "model": "Boosted trees",
+          "n": 795,
+          "main": "0.2729",
+          "restricted": "0.2453",
+          "change": "-0.0276",
+          "brier_skill": "11.5%",
+          "skill_50": "1.9%"
+        },
+        {
+          "stage": "Pre-IPO",
+          "model": "CatBoost + traits",
+          "n": 795,
+          "main": "0.2519",
+          "restricted": "0.2501",
+          "change": "-0.0018",
+          "brier_skill": "9.7%",
+          "skill_50": "-0.05%"
+        },
+        {
+          "stage": "Pre-IPO",
+          "model": "TabNet + traits",
+          "n": 795,
+          "main": "0.2791",
+          "restricted": "0.2446",
+          "change": "-0.0345",
+          "brier_skill": "11.7%",
+          "skill_50": "2.2%"
+        },
+        {
+          "stage": "Day 20",
+          "model": "Training rate",
+          "n": 784,
+          "main": "0.2919",
+          "restricted": "0.2592",
+          "change": "-0.0327",
+          "brier_skill": "0.0%",
+          "skill_50": "-3.7%"
+        },
+        {
+          "stage": "Day 20",
+          "model": "Logistic",
+          "n": 784,
+          "main": "0.2215",
+          "restricted": "0.2167",
+          "change": "-0.0047",
+          "brier_skill": "16.4%",
+          "skill_50": "13.3%"
+        },
+        {
+          "stage": "Day 20",
+          "model": "Boosted trees",
+          "n": 784,
+          "main": "0.2202",
+          "restricted": "0.2259",
+          "change": "+0.0057",
+          "brier_skill": "12.9%",
+          "skill_50": "9.6%"
+        },
+        {
+          "stage": "Day 20",
+          "model": "Logistic + traits",
+          "n": 784,
+          "main": "0.2182",
+          "restricted": "0.2138",
+          "change": "-0.0044",
+          "brier_skill": "17.5%",
+          "skill_50": "14.5%"
+        },
+        {
+          "stage": "Day 20",
+          "model": "CatBoost prices",
+          "n": 784,
+          "main": "0.2229",
+          "restricted": "0.2226",
+          "change": "-0.0003",
+          "brier_skill": "14.1%",
+          "skill_50": "11.0%"
+        },
+        {
+          "stage": "Day 20",
+          "model": "CatBoost + traits",
+          "n": 784,
+          "main": "0.2216",
+          "restricted": "0.2170",
+          "change": "-0.0046",
+          "brier_skill": "16.3%",
+          "skill_50": "13.2%"
+        },
+        {
+          "stage": "Day 20",
+          "model": "TabNet + traits",
+          "n": 784,
+          "main": "0.2321",
+          "restricted": "0.2234",
+          "change": "-0.0088",
+          "brier_skill": "13.8%",
+          "skill_50": "10.7%"
+        }
+      ]
+    }
+  },
+  "sources": [
+    {
+      "id": "results",
+      "label": "Frozen challenger forecasts and evaluation",
+      "path": "research/expanded/results.json.gz",
+      "query": {
+        "engine": "SQLite",
+        "language": "sql",
+        "description": "Recompute Brier error and event counts from the frozen model forecasts in research/expanded/audit.sqlite3. Compare against Python evaluation; retain ranking metrics and uncertainty from results.json.gz.",
+        "sql": "SELECT stage, model,\n       COUNT(*) AS test_cases,\n       SUM(event) AS events,\n       AVG((probability - event) * (probability - event)) AS brier,\n       AVG(probability) AS mean_probability\nFROM forecasts\nGROUP BY stage, model\nORDER BY stage, brier;\n",
+        "tables_used": [
+          "forecasts"
+        ],
+        "executed_at": "2026-09-08T00:01:22.859503+00:00"
+      }
+    },
+    {
+      "id": "coverage_source",
+      "label": "Registry and price-coverage reconciliation",
+      "path": "research/expanded/audit.sqlite3",
+      "query": {
+        "engine": "SQLite",
+        "language": "sql",
+        "sql": "SELECT year, SUM(in_scope) AS in_scope, SUM(matched) AS matched, 1.0 * SUM(matched) / SUM(in_scope) AS coverage FROM registry_coverage GROUP BY year ORDER BY year",
+        "description": "Count in-scope Field\u2013Ritter registry rows and accepted Yahoo price matches by year.",
+        "tables_used": [
+          "registry_coverage"
+        ]
+      }
+    },
+    {
+      "id": "registry",
+      "label": "Field\u2013Ritter issuer registry and source audit",
+      "path": "research/expanded/universe.json.gz",
+      "href": "https://site.warrington.ufl.edu/ritter/ipo-data/"
+    },
+    {
+      "id": "protocol",
+      "label": "Frozen training and evaluation protocol",
+      "path": "research/expanded/protocol.json"
+    },
+    {
+      "id": "coverage_sensitivity",
+      "label": "Training coverage sensitivity on shared test issuers",
+      "path": "research/expanded/coverage-results.json.gz",
+      "query": {
+        "engine": "SQLite",
+        "language": "sql",
+        "sql": "SELECT cohort, stage, model, COUNT(*) AS cases, AVG((probability-event)*(probability-event)) AS brier FROM coverage_forecasts GROUP BY cohort, stage, model",
+        "description": "Recompute both training cohorts' Brier errors on matching 2020\u20132025 test issuers. Read training counts from the saved folds and skill from Python evaluation.",
+        "tables_used": [
+          "coverage_forecasts"
+        ]
+      }
+    }
+  ]
+}

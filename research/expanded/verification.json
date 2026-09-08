@@ -1,0 +1,11 @@
+{
+  "status": "passed",
+  "saved_model_groups_verified": 40,
+  "source_files_hash_checked": 12,
+  "source_files_expected": 12,
+  "price_responses_reconciled": 1394,
+  "price_responses_expected": 1394,
+  "dataset_rebuilt": true,
+  "stage_metrics_recomputed": true,
+  "results_sha256": "394634d025e2bfc5774e0a214a2d2690c95676c893854f57109632c41749b3fe"
+}

@@ -1,0 +1,42 @@
+{
+  "version": "1.0.0",
+  "asOf": "2026-09-07",
+  "records": [
+    {
+      "id": "series-h-equity", "metric": "Private post-money valuation", "value": 965, "unit": "USD billions", "relation": "equal",
+      "status": "company_disclosure", "publishedAt": "2026-05-28", "period": "Series H financing",
+      "sourceUrl": "https://www.anthropic.com/news/series-h", "sourceTitle": "Anthropic Series H announcement",
+      "excerpt": "valuing the company at $965 billion post-money",
+      "note": "Private financing reference. This figure does not establish an IPO price or enterprise value."
+    },
+    {
+      "id": "may-revenue-run-rate", "metric": "Revenue run rate", "value": 47, "unit": "USD billions per year", "relation": "greater_than",
+      "status": "company_disclosure", "publishedAt": "2026-05-28", "period": "May 2026 run rate",
+      "sourceUrl": "https://www.anthropic.com/news/series-h", "sourceTitle": "Anthropic Series H announcement",
+      "excerpt": "our run-rate revenue crossed $47 billion earlier this month",
+      "note": "Company-reported run rate. This measure differs from revenue earned over a fiscal year."
+    },
+    {
+      "id": "confidential-s1", "metric": "IPO registration", "value": null, "unit": null, "relation": null,
+      "status": "company_disclosure", "publishedAt": "2026-06-01", "period": "Confidential draft submission",
+      "sourceUrl": "https://www.anthropic.com/news/confidential-draft-s1-sec", "sourceTitle": "Anthropic registration announcement",
+      "excerpt": "The number of shares to be offered and the price have not yet been set.",
+      "note": "Anthropic announced a confidential draft S-1. This dataset contains no public prospectus."
+    },
+    {
+      "id": "annual-revenue", "metric": "Annual recognized revenue", "value": null, "unit": "USD billions", "relation": null,
+      "status": "unavailable", "publishedAt": null, "period": null, "sourceUrl": null, "sourceTitle": null, "excerpt": null,
+      "note": "No reviewed annual financial statement in this evidence version."
+    },
+    {
+      "id": "net-cash", "metric": "Cash less debt and other senior claims", "value": null, "unit": "USD billions", "relation": null,
+      "status": "unavailable", "publishedAt": null, "period": null, "sourceUrl": null, "sourceTitle": null, "excerpt": null,
+      "note": "Funding proceeds do not establish cash on hand. Enter an explicit net-cash assumption to estimate equity value."
+    },
+    {
+      "id": "diluted-shares", "metric": "Diluted share count", "value": null, "unit": "billions of shares", "relation": null,
+      "status": "unavailable", "publishedAt": null, "period": null, "sourceUrl": null, "sourceTitle": null, "excerpt": null,
+      "note": "Per-share valuation remains unavailable until a supported capital structure exists."
+    }
+  ]
+}

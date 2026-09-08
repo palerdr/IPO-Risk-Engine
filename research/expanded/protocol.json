@@ -1,0 +1,37 @@
+{
+  "version": "3.0.0",
+  "registry_years": [2010, 2025],
+  "stages": [0, 20],
+  "horizon_sessions": 20,
+  "drawdown_threshold": 0.2,
+  "outer_test_years": [[2018, 2019], [2020, 2021], [2022, 2023], [2024, 2025]],
+  "inner_validation_fraction_dates": 0.2,
+  "selection_metric": "brier",
+  "catboost_candidates": [
+    {"depth": 3, "l2_leaf_reg": 5},
+    {"depth": 5, "l2_leaf_reg": 10},
+    {"depth": 7, "l2_leaf_reg": 20}
+  ],
+  "catboost_iterations": 600,
+  "catboost_learning_rate": 0.03,
+  "catboost_early_stopping_rounds": 60,
+  "tabnet_candidates": [
+    {"n_d": 8, "n_a": 8, "n_steps": 3, "lambda_sparse": 0.001},
+    {"n_d": 16, "n_a": 16, "n_steps": 3, "lambda_sparse": 0.001},
+    {"n_d": 16, "n_a": 16, "n_steps": 5, "lambda_sparse": 0.01}
+  ],
+  "tabnet_max_epochs": 160,
+  "tabnet_patience": 25,
+  "tabnet_learning_rate": 0.01,
+  "tabnet_batch_size": 128,
+  "tabnet_virtual_batch_size": 32,
+  "seeds": [42, 137, 2026],
+  "bootstrap_replicates": 2000,
+  "bootstrap_block": "calendar_quarter",
+  "calibration": "No post-hoc calibration. Evaluate raw probabilities and fixed reliability bins.",
+  "selection": "Select each challenger's configuration and training length with an inner chronological validation split. Refit on all mature outer training rows. Average the three fixed seeds. Do not tune on outer test predictions.",
+  "known_test_overlap": "The prior MVP exposed some 2024-2025 outcomes. Report expanded test results with and without prior MVP listings. Treat the study as retrospective evidence.",
+  "pre_ipo_definition": "Score after final offer pricing and before the first trade. Use market bars strictly before listing. Predict a 20% maximum adjusted-close peak-to-trough decline within the first 20 trading sessions. The first closing price anchors the path; this is not an offer-to-close return target.",
+  "day_20_definition": "Score at session 20 close. Preserve the MVP target: maximum adjusted-close peak-to-trough decline across the next 20 sessions, with session 20 close as the initial peak.",
+  "features_excluded": ["post-IPO financial statements", "current market capitalization", "SCOOP ratings", "IPO first-day outcomes in pre-IPO features", "Ritter internet flag", "Ritter post-issue shares"]
+}

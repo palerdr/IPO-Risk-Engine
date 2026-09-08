@@ -1,0 +1,477 @@
+{
+  "version": "1.0",
+  "selection": "Frozen legacy curated listing registry. Convenience sample; not a complete IPO universe. No selection by model outcomes. Security classifications need independent audit.",
+  "source": "legacy/src/ipo_risk_engine/snapshots/builder.py IPO_REGISTRY",
+  "listings": [
+    {
+      "symbol": "SDHC",
+      "listing_date": "2024-01-11",
+      "sector": "consumer_goods"
+    },
+    {
+      "symbol": "KSPI",
+      "listing_date": "2024-01-19",
+      "sector": "financials"
+    },
+    {
+      "symbol": "CGON",
+      "listing_date": "2024-01-25",
+      "sector": "health_care"
+    },
+    {
+      "symbol": "BTSG",
+      "listing_date": "2024-01-26",
+      "sector": "health_care"
+    },
+    {
+      "symbol": "AS",
+      "listing_date": "2024-02-01",
+      "sector": "consumer_goods"
+    },
+    {
+      "symbol": "AHR",
+      "listing_date": "2024-02-07",
+      "sector": "real_estate"
+    },
+    {
+      "symbol": "KYTX",
+      "listing_date": "2024-02-08",
+      "sector": "health_care"
+    },
+    {
+      "symbol": "MGX",
+      "listing_date": "2024-02-09",
+      "sector": "health_care"
+    },
+    {
+      "symbol": "TBBB",
+      "listing_date": "2024-02-09",
+      "sector": "consumer_goods"
+    },
+    {
+      "symbol": "ALAB",
+      "listing_date": "2024-03-20",
+      "sector": "technology"
+    },
+    {
+      "symbol": "RDDT",
+      "listing_date": "2024-03-21",
+      "sector": "technology"
+    },
+    {
+      "symbol": "CTNM",
+      "listing_date": "2024-04-05",
+      "sector": "health_care"
+    },
+    {
+      "symbol": "PACS",
+      "listing_date": "2024-04-11",
+      "sector": "health_care"
+    },
+    {
+      "symbol": "ULS",
+      "listing_date": "2024-04-12",
+      "sector": "industrials"
+    },
+    {
+      "symbol": "IBTA",
+      "listing_date": "2024-04-18",
+      "sector": "technology"
+    },
+    {
+      "symbol": "CTRI",
+      "listing_date": "2024-04-18",
+      "sector": "industrials"
+    },
+    {
+      "symbol": "LOAR",
+      "listing_date": "2024-04-25",
+      "sector": "industrials"
+    },
+    {
+      "symbol": "RBRK",
+      "listing_date": "2024-04-25",
+      "sector": "technology"
+    },
+    {
+      "symbol": "MRX",
+      "listing_date": "2024-04-25",
+      "sector": "financials"
+    },
+    {
+      "symbol": "VIK",
+      "listing_date": "2024-05-01",
+      "sector": "consumer_services"
+    },
+    {
+      "symbol": "NNE",
+      "listing_date": "2024-05-08",
+      "sector": "energy"
+    },
+    {
+      "symbol": "PAL",
+      "listing_date": "2024-05-09",
+      "sector": "industrials"
+    },
+    {
+      "symbol": "SVCO",
+      "listing_date": "2024-05-09",
+      "sector": "technology"
+    },
+    {
+      "symbol": "ZK",
+      "listing_date": "2024-05-10",
+      "sector": "technology"
+    },
+    {
+      "symbol": "HDL",
+      "listing_date": "2024-05-17",
+      "sector": "consumer_services"
+    },
+    {
+      "symbol": "BOW",
+      "listing_date": "2024-05-23",
+      "sector": "financials"
+    },
+    {
+      "symbol": "FLYE",
+      "listing_date": "2024-06-06",
+      "sector": "consumer_goods"
+    },
+    {
+      "symbol": "GAUZ",
+      "listing_date": "2024-06-06",
+      "sector": "technology"
+    },
+    {
+      "symbol": "WAY",
+      "listing_date": "2024-06-07",
+      "sector": "technology"
+    },
+    {
+      "symbol": "RAPP",
+      "listing_date": "2024-06-07",
+      "sector": "health_care"
+    },
+    {
+      "symbol": "TEM",
+      "listing_date": "2024-06-14",
+      "sector": "technology"
+    },
+    {
+      "symbol": "WBTN",
+      "listing_date": "2024-06-27",
+      "sector": "technology"
+    },
+    {
+      "symbol": "ALMS",
+      "listing_date": "2024-06-28",
+      "sector": "health_care"
+    },
+    {
+      "symbol": "LB",
+      "listing_date": "2024-06-28",
+      "sector": "oil_gas"
+    },
+    {
+      "symbol": "ARDT",
+      "listing_date": "2024-07-18",
+      "sector": "health_care"
+    },
+    {
+      "symbol": "TWFG",
+      "listing_date": "2024-07-18",
+      "sector": "financials"
+    },
+    {
+      "symbol": "ARTV",
+      "listing_date": "2024-07-19",
+      "sector": "health_care"
+    },
+    {
+      "symbol": "OS",
+      "listing_date": "2024-07-24",
+      "sector": "technology"
+    },
+    {
+      "symbol": "LINE",
+      "listing_date": "2024-07-25",
+      "sector": "industrials"
+    },
+    {
+      "symbol": "CON",
+      "listing_date": "2024-07-25",
+      "sector": "health_care"
+    },
+    {
+      "symbol": "ACTU",
+      "listing_date": "2024-08-13",
+      "sector": "health_care"
+    },
+    {
+      "symbol": "MBX",
+      "listing_date": "2024-09-13",
+      "sector": "health_care"
+    },
+    {
+      "symbol": "BCAX",
+      "listing_date": "2024-09-13",
+      "sector": "health_care"
+    },
+    {
+      "symbol": "ZBIO",
+      "listing_date": "2024-09-13",
+      "sector": "health_care"
+    },
+    {
+      "symbol": "BKV",
+      "listing_date": "2024-09-26",
+      "sector": "oil_gas"
+    },
+    {
+      "symbol": "BIOA",
+      "listing_date": "2024-09-26",
+      "sector": "health_care"
+    },
+    {
+      "symbol": "GRDN",
+      "listing_date": "2024-09-26",
+      "sector": "health_care"
+    },
+    {
+      "symbol": "SARO",
+      "listing_date": "2024-10-02",
+      "sector": "industrials"
+    },
+    {
+      "symbol": "FVR",
+      "listing_date": "2024-10-02",
+      "sector": "real_estate"
+    },
+    {
+      "symbol": "CBNA",
+      "listing_date": "2024-10-04",
+      "sector": "financials"
+    },
+    {
+      "symbol": "KLC",
+      "listing_date": "2024-10-09",
+      "sector": "consumer_services"
+    },
+    {
+      "symbol": "CAMP",
+      "listing_date": "2024-10-11",
+      "sector": "health_care"
+    },
+    {
+      "symbol": "CBLL",
+      "listing_date": "2024-10-11",
+      "sector": "health_care"
+    },
+    {
+      "symbol": "UPB",
+      "listing_date": "2024-10-11",
+      "sector": "health_care"
+    },
+    {
+      "symbol": "INGM",
+      "listing_date": "2024-10-24",
+      "sector": "technology"
+    },
+    {
+      "symbol": "SEPN",
+      "listing_date": "2024-10-25",
+      "sector": "health_care"
+    },
+    {
+      "symbol": "WRD",
+      "listing_date": "2024-10-25",
+      "sector": "technology"
+    },
+    {
+      "symbol": "GELS",
+      "listing_date": "2024-10-29",
+      "sector": "health_care"
+    },
+    {
+      "symbol": "PLRZ",
+      "listing_date": "2024-10-29",
+      "sector": "health_care"
+    },
+    {
+      "symbol": "PONY",
+      "listing_date": "2024-11-27",
+      "sector": "technology"
+    },
+    {
+      "symbol": "TTAN",
+      "listing_date": "2024-12-12",
+      "sector": "technology"
+    },
+    {
+      "symbol": "AVR",
+      "listing_date": "2024-12-13",
+      "sector": "health_care"
+    },
+    {
+      "symbol": "CRWV",
+      "listing_date": "2025-03-28",
+      "sector": "technology"
+    },
+    {
+      "symbol": "CRCL",
+      "listing_date": "2025-06-05",
+      "sector": "financials"
+    },
+    {
+      "symbol": "ETOR",
+      "listing_date": "2025-06-10",
+      "sector": "technology"
+    },
+    {
+      "symbol": "CHYM",
+      "listing_date": "2025-06-12",
+      "sector": "health_care"
+    },
+    {
+      "symbol": "VOYG",
+      "listing_date": "2025-06-12",
+      "sector": "technology"
+    },
+    {
+      "symbol": "CARL",
+      "listing_date": "2025-07-23",
+      "sector": "health_care"
+    },
+    {
+      "symbol": "NIQ",
+      "listing_date": "2025-07-23",
+      "sector": "technology"
+    },
+    {
+      "symbol": "ARX",
+      "listing_date": "2025-07-24",
+      "sector": "financials"
+    },
+    {
+      "symbol": "MH",
+      "listing_date": "2025-07-24",
+      "sector": "consumer_services"
+    },
+    {
+      "symbol": "AMBQ",
+      "listing_date": "2025-07-30",
+      "sector": "technology"
+    },
+    {
+      "symbol": "FIG",
+      "listing_date": "2025-07-31",
+      "sector": "technology"
+    },
+    {
+      "symbol": "SI",
+      "listing_date": "2025-07-31",
+      "sector": "health_care"
+    },
+    {
+      "symbol": "HTFL",
+      "listing_date": "2025-08-08",
+      "sector": "health_care"
+    },
+    {
+      "symbol": "DKI",
+      "listing_date": "2025-08-08",
+      "sector": "technology"
+    },
+    {
+      "symbol": "BLSH",
+      "listing_date": "2025-08-13",
+      "sector": "financials"
+    },
+    {
+      "symbol": "MIAX",
+      "listing_date": "2025-08-14",
+      "sector": "financials"
+    },
+    {
+      "symbol": "NSRX",
+      "listing_date": "2025-08-14",
+      "sector": "health_care"
+    },
+    {
+      "symbol": "CURX",
+      "listing_date": "2025-08-26",
+      "sector": "health_care"
+    },
+    {
+      "symbol": "PMI",
+      "listing_date": "2025-08-29",
+      "sector": "health_care"
+    },
+    {
+      "symbol": "FCHL",
+      "listing_date": "2025-09-04",
+      "sector": "consumer_services"
+    },
+    {
+      "symbol": "KLAR",
+      "listing_date": "2025-09-10",
+      "sector": "financials"
+    },
+    {
+      "symbol": "FIGR",
+      "listing_date": "2025-09-11",
+      "sector": "technology"
+    },
+    {
+      "symbol": "LBRX",
+      "listing_date": "2025-09-11",
+      "sector": "health_care"
+    },
+    {
+      "symbol": "BRCB",
+      "listing_date": "2025-09-12",
+      "sector": "consumer_services"
+    },
+    {
+      "symbol": "LGN",
+      "listing_date": "2025-09-12",
+      "sector": "industrials"
+    },
+    {
+      "symbol": "VIA",
+      "listing_date": "2025-09-12",
+      "sector": "technology"
+    },
+    {
+      "symbol": "STUB",
+      "listing_date": "2025-09-17",
+      "sector": "consumer_services"
+    },
+    {
+      "symbol": "WBI",
+      "listing_date": "2025-09-17",
+      "sector": "oil_gas"
+    },
+    {
+      "symbol": "NTSK",
+      "listing_date": "2025-09-18",
+      "sector": "technology"
+    },
+    {
+      "symbol": "PTRN",
+      "listing_date": "2025-09-19",
+      "sector": "consumer_goods"
+    },
+    {
+      "symbol": "CBK",
+      "listing_date": "2025-10-02",
+      "sector": "financials"
+    },
+    {
+      "symbol": "ALH",
+      "listing_date": "2025-10-09",
+      "sector": "industrials"
+    }
+  ]
+}

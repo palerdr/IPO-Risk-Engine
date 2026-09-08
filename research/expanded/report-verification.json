@@ -1,0 +1,33 @@
+{
+  "ok": true,
+  "html": "/Users/palerider/Desktop/projects/ipo/docs/CHALLENGER_REPORT.html",
+  "stages": {
+    "validation": "passed",
+    "package": "passed",
+    "verification": "passed"
+  },
+  "counts": {
+    "blocks": 28,
+    "charts": 3,
+    "html": 0,
+    "metrics": 0,
+    "tables": 9
+  },
+  "sourceDialog": "passed",
+  "sourceInteraction": "keyboard_menu_semantic_click",
+  "viewports": [
+    1440,
+    390
+  ],
+  "timings": {
+    "validateAndPackageMs": 916.9,
+    "staticChartExtractionMs": 871.4,
+    "browserRunMs": 682.4,
+    "readerReadyMs": 47.6,
+    "contentChecksMs": 32,
+    "sourceDialogMs": 32.1,
+    "responsiveChecksMs": 32,
+    "verificationMs": 690.9,
+    "totalMs": 1611.2
+  }
+}
