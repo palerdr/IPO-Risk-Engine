@@ -1,12 +1,13 @@
 """Fetch and freeze a public-data convenience sample with an exclusion ledger."""
-from concurrent.futures import ThreadPoolExecutor
-from datetime import date, datetime, timedelta, timezone
+
 import hashlib
 import json
 import re
-from pathlib import Path
 import urllib.parse
 import urllib.request
+from concurrent.futures import ThreadPoolExecutor
+from datetime import date, datetime, timedelta, timezone
+from pathlib import Path
 
 
 def digest(value: bytes) -> str:
@@ -16,11 +17,14 @@ def digest(value: bytes) -> str:
 def fetch_history(symbol: str, start: date, end: date, cache: Path, refresh: bool = False) -> dict:
     if not re.fullmatch(r"[A-Z][A-Z0-9.-]{0,15}", symbol) or ".." in symbol:
         raise ValueError("Use a valid ticker symbol")
-    params = urllib.parse.urlencode({
-        "period1": int(datetime.combine(start, datetime.min.time(), timezone.utc).timestamp()),
-        "period2": int(datetime.combine(end, datetime.min.time(), timezone.utc).timestamp()),
-        "interval": "1d", "events": "div,splits",
-    })
+    params = urllib.parse.urlencode(
+        {
+            "period1": int(datetime.combine(start, datetime.min.time(), timezone.utc).timestamp()),
+            "period2": int(datetime.combine(end, datetime.min.time(), timezone.utc).timestamp()),
+            "interval": "1d",
+            "events": "div,splits",
+        }
+    )
     url = f"https://query1.finance.yahoo.com/v8/finance/chart/{urllib.parse.quote(symbol, safe='')}?{params}"
     path = cache / f"{symbol}-{start}-{end}.json"
     raw_path = path.with_suffix(".response.json")
@@ -39,21 +43,28 @@ def fetch_history(symbol: str, start: date, end: date, cache: Path, refresh: boo
     if result["meta"].get("currency") != "USD":
         raise ValueError("Expected USD prices")
     from zoneinfo import ZoneInfo
+
     zone = ZoneInfo(result["meta"]["exchangeTimezoneName"])
     quotes = result["indicators"]["quote"][0]
     adjusted = result["indicators"]["adjclose"][0]["adjclose"]
     bars = []
     for i, timestamp in enumerate(result.get("timestamp", [])):
-        bars.append({
-            "date": datetime.fromtimestamp(timestamp, zone).date().isoformat(),
-            "adjusted_close": adjusted[i], "volume": quotes["volume"][i],
-        })
+        bars.append(
+            {
+                "date": datetime.fromtimestamp(timestamp, zone).date().isoformat(),
+                "adjusted_close": adjusted[i],
+                "volume": quotes["volume"][i],
+            }
+        )
     saved = {
-        "symbol": symbol, "source_url": url,
+        "symbol": symbol,
+        "source_url": url,
         "source_page": f"https://finance.yahoo.com/quote/{symbol}/history/",
         "retrieved_at": datetime.now(timezone.utc).isoformat(),
         "raw_sha256": digest(raw),
-        "first_trade_date": datetime.fromtimestamp(result["meta"]["firstTradeDate"], zone).date().isoformat(),
+        "first_trade_date": datetime.fromtimestamp(result["meta"]["firstTradeDate"], zone)
+        .date()
+        .isoformat(),
         "bars": bars,
     }
     cache.mkdir(parents=True, exist_ok=True)
@@ -69,14 +80,24 @@ def fetch_cohort(universe_path: Path, output: Path, refresh: bool = False) -> di
         raise ValueError("The universe must contain one entry per symbol")
     dates = [date.fromisoformat(row["listing_date"]) for row in listings]
     cache = output.parent / "raw"
-    benchmark = fetch_history("SPY", min(dates) - timedelta(days=45), max(dates) + timedelta(days=130), cache, refresh)
+    benchmark = fetch_history(
+        "SPY", min(dates) - timedelta(days=45), max(dates) + timedelta(days=130), cache, refresh
+    )
 
     def fetch_one(row):
         try:
             listing = date.fromisoformat(row["listing_date"])
-            history = fetch_history(row["symbol"], listing - timedelta(days=7), listing + timedelta(days=130), cache, refresh)
+            history = fetch_history(
+                row["symbol"],
+                listing - timedelta(days=7),
+                listing + timedelta(days=130),
+                cache,
+                refresh,
+            )
             if history["first_trade_date"] != row["listing_date"]:
-                raise ValueError(f"Vendor first trade {history['first_trade_date']} differs from registry {row['listing_date']}")
+                raise ValueError(
+                    f"Vendor first trade {history['first_trade_date']} differs from registry {row['listing_date']}"
+                )
             return {**row, **history}, None
         except Exception as exc:
             return None, {**row, "reason": f"{type(exc).__name__}: {exc}"}
@@ -84,7 +105,8 @@ def fetch_cohort(universe_path: Path, output: Path, refresh: bool = False) -> di
     with ThreadPoolExecutor(max_workers=3) as pool:
         fetched = list(pool.map(fetch_one, listings))
     bundle = {
-        "schema_version": "2.0.0", "universe_sha256": digest(universe_path.read_bytes()),
+        "schema_version": "2.0.0",
+        "universe_sha256": digest(universe_path.read_bytes()),
         "selection": universe["selection"],
         "limitations": [
             "Curated convenience sample. Missing or delisted histories can create survivorship bias.",

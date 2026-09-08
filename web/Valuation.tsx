@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { downloadJson } from "./lib/download";
 import {
   DEFAULT_INPUTS,
   evaluateScenario,
@@ -62,16 +63,7 @@ export default function Valuation() {
     if (!parsed.ok) return;
     const output = exportScenario(parsed.value);
     if (!output.ok) return;
-    const url = URL.createObjectURL(
-      new Blob([JSON.stringify(output.value, null, 2)], {
-        type: "application/json",
-      }),
-    );
-    const anchor = document.createElement("a");
-    anchor.href = url;
-    anchor.download = "anthropic-valuation.json";
-    anchor.click();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    downloadJson(output.value, "anthropic-valuation.json");
     setMessage("You exported the scenario with its source evidence.");
   }
   return (

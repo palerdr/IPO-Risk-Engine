@@ -2,7 +2,7 @@
   "status": "retrospective_diagnostic",
   "inputs": {
     "dataset.json.gz": "f0d2aecc8e58cbb3fe1c49a8a4141ec7801650b69f3f44c071f65588026c748d",
-    "results.json.gz": "394634d025e2bfc5774e0a214a2d2690c95676c893854f57109632c41749b3fe",
+    "results.json.gz": "2c228d0b3760177617fd1854f904542a629139bc4f4a3a67a2cad5fda9a0916e",
     "input.json.gz": "34c96a2672c21879e36976b07415befa614c79e352d4638d6784fd595e0e9669"
   },
   "ranking_selection": "Use the features and directions from the review: negative log offer price and positive daily volatility. These are post-hoc benchmarks; do not describe them as a new held-out test.",

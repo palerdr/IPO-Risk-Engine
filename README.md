@@ -1,73 +1,61 @@
 # IPO Risk Research
 
-You have a reproducible forecast benchmark with no demonstrated allocation-policy benefit. Read the [decision audit and allocator design](research/decision/README.md) before using the model scores.
+You can reproduce IPO forecast experiments and inspect their limits. You have no demonstrated allocation-policy benefit. The [decision audit](research/decision/README.md) explains the single-feature benchmarks and the mismatch between drawdown events and allocation losses.
 
-You can replay real listing-risk predictions and inspect the model evaluation. The MVP estimates the probability of a 20% adjusted-close drawdown over the next 20 sessions after observing a listing's first 20 sessions.
+## Run the dashboard
 
-You have a frozen public-data sample with 84 eligible listings and 42 held-out predictions. The primary model uses regularized logistic regression. You can compare it with a training-event-rate baseline and shallow gradient-boosted trees. You make no position-sizing or investment-return claim.
-
-Read the [study and interview guide](docs/STUDY.md) for measured results and limits.
-
-You can inspect the expanded CatBoost and TabNet experiment in the [challenger report](docs/CHALLENGER_REPORT.html) or the [methods and reproduction guide](docs/CHALLENGER_STUDY.md). The frozen cohort covers 2010–2025 and contains 1,358 pre-IPO observations and 1,343 day-20 observations. The study compares models on 980 and 964 chronological test cases. Public price coverage remains incomplete; inspect the annual coverage audit before using population-level claims.
-
-**Run the expanded study**
-
-```sh
-uv sync --locked --extra challengers
-uv run --extra challengers ipo-challengers build
-uv run --extra challengers ipo-challengers train
-uv run --extra challengers ipo-challengers verify
-uv run --extra challengers ipo-challengers report
-```
-
-You can run these commands without network access after installing the locked dependencies. The trainer saves models and their preprocessing under `artifacts/challengers`. It reloads each saved model and checks its predictions. You can inspect fold metrics and individual forecasts in `research/expanded/results.json.gz`.
-
-You store the large snapshots as deterministic gzip files in Git and calculate their provenance hashes over decompressed content. The training and verification commands include the 2018-onward coverage sensitivity. Read the [research storage and reproduction notes](research/expanded/README.md) for details.
-
-You regenerate Markdown and report data with the report command above. HTML regeneration requires the external Data Analytics plugin path passed to `research/expanded/render_report.mjs`; the repository alone does not contain its renderer. You can open the committed HTML without the plugin.
-
-You preserve the MVP report below as a benchmark. The existing dashboard reads that report; the expanded experiment has its own report.
-
-**Run the dashboard**
-
-Use Node 22.13 or a later supported release:
+Use Node 22.13 or newer. Run these commands from the repository root:
 
 ```sh
 npm --prefix web ci
 npm --prefix web run dev
 ```
 
-Open the local address from Vite. Use Risk research for the historical replay. Use Anthropic valuation for the separate DCF case study. You can export either analysis from the interface.
+Open the URL that Vite prints. You need no backend or credentials. **Risk research** replays the frozen MVP. **Anthropic valuation** presents a separate DCF scenario calculator.
 
-**Reproduce the risk study**
+## Choose the research workflow
 
-Use Python 3.11 or a later supported release and uv:
+| Workflow | Evidence and status | Read more |
+|---|---|---|
+| MVP replay | 84 eligible listings; 42 held-out predictions from fixed logistic and boosted-tree models | [Study guide](docs/STUDY.md) |
+| Expanded experiment | 1,358 pre-IPO and 1,343 day-20 observations; CatBoost and TabNet comparisons | [Challenger report](docs/CHALLENGER_REPORT.html), [methods](docs/CHALLENGER_STUDY.md) |
+| Allocator design | Draft accept/decline policy; no fitted return model or execution backtest | [Decision protocol](research/decision/protocol.json) |
+| Anthropic valuation | Assumption-based valuation with a dated evidence snapshot | [Dashboard guide](web/README.md) |
+
+The dashboard reads the MVP results. You open the expanded report as a separate HTML file. Neither experiment validates an allocation recommendation for Anthropic.
+
+## Reproduce the studies
+
+Use Python 3.13 and uv for the recorded research environment. The `.python-version` file selects that Python line. Run from the repository root:
 
 ```sh
-uv sync --locked
+uv sync --locked --extra challengers
 uv run ipo-research evaluate
+uv run ipo-challengers audit
 ```
 
-You can reproduce the report without credentials or network access. The command reads `research/input.json` and writes `web/data/research.json`. Vite loads the saved report; the browser does not train or serve models.
+The first command installs the locked dependencies. The evaluation command rebuilds `web/data/research.json`; the audit command writes `research/decision/audit.json`. Both use bundled data after installation.
 
-You can fetch a new price snapshot with `uv run ipo-research fetch --refresh`. This command uses Yahoo Finance's public chart endpoint and the fixed registry in `research/universe.json`. The endpoint has no stability guarantee. Preserve the bundled input if you need to reproduce the reported results. Cached responses remain under `research/raw/`.
-
-**Verify the MVP**
+To refit the expanded study, including the 2018-onward sensitivity:
 
 ```sh
-uv run --extra challengers python -m unittest discover -s tests -v
+uv run ipo-challengers build
+uv run ipo-challengers train
+uv run ipo-challengers verify
+uv run ipo-challengers report
+```
+
+You retain model files under the ignored `artifacts/challengers/` directory. A fresh clone needs `train` before `verify`. The report command uses committed forecasts and generates Markdown, report data, and a SQL audit. HTML regeneration needs an external renderer; see the [research guide](research/expanded/README.md).
+
+## Maintain the project
+
+```sh
+uv run ruff check .
+uv run ruff format --check .
+uv run python -m unittest discover -s tests -v
 npm --prefix web run build
 ```
 
-The Python suite checks feature cutoffs and chronological splits. It also reproduces the report and verifies frozen model predictions. The web build runs type checks and tests before producing `web/dist/`.
+Run `uv sync --locked --extra challengers` before the full Python suite. The web build includes type checks and tests. Read [CONTRIBUTING.md](CONTRIBUTING.md) for the code map and the rules for updating research artifacts.
 
-**Read the active code**
-
-| Location | Purpose |
-|---|---|
-| `src/ipo_research/data.py` and `dataset.py` | Freeze source data, check coverage, and construct dated observations |
-| `src/ipo_research/models.py` and `evaluate.py` | Fit the fixed models and save held-out predictions with provenance |
-| `web/App.tsx` and `web/Valuation.tsx` | Present the historical replay and separate valuation case study |
-| `research/` and `web/data/research.json` | Preserve the cohort input and generated research report |
-
-You can inspect the prior prototype under [legacy/](legacy/README.md). Its poker policy and historical performance claims have no role in the active MVP. You retain its source and tests for reference.
+You retain the prior prototype in [legacy/](legacy/README.md). It has separate dependencies and historical claims. You exclude it from active checks.

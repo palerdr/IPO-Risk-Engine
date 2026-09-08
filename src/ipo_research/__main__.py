@@ -1,4 +1,5 @@
 """Run the IPO research commands from the repository root."""
+
 import argparse
 from pathlib import Path
 
@@ -16,10 +17,14 @@ def main():
     args = parser.parse_args()
     if args.command == "fetch":
         from .data import fetch_cohort
+
         result = fetch_cohort(args.universe, args.output, args.refresh)
-        print(f"Fetched {len(result['listings'])}; excluded {len(result['exclusions'])}. Snapshot: {args.output}")
+        print(
+            f"Fetched {len(result['listings'])}; excluded {len(result['exclusions'])}. Snapshot: {args.output}"
+        )
     else:
         from .evaluate import run_evaluation
+
         result = run_evaluation(args.input, args.output)
         print(f"Evaluated {len(result['predictions'])} held-out listings. Report: {args.output}")
 

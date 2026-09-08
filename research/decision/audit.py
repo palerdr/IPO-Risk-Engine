@@ -1,4 +1,5 @@
 """Reproduce the review of the frozen held-out forecasts."""
+
 import json
 from pathlib import Path
 
@@ -13,5 +14,12 @@ def audit():
 
 if __name__ == "__main__":
     result = audit()
-    print(json.dumps({stage: {key: value for key, value in values.items() if key != "yearly"}
-                      for stage, values in result["stages"].items()}, indent=2))
+    print(
+        json.dumps(
+            {
+                stage: {key: value for key, value in values.items() if key != "yearly"}
+                for stage, values in result["stages"].items()
+            },
+            indent=2,
+        )
+    )

@@ -20,24 +20,24 @@ export const PERCENT_FIELDS = new Set<NumericField>([
 ]);
 export function toForm(input: ValuationInputs = DEFAULT_INPUTS): FormValues {
   return Object.fromEntries(
-    (Object.keys(LIMITS) as NumericField[]).map((key) => [
-      key,
-      input[key] === null
-        ? ""
-        : String(Number((input[key]! * (PERCENT_FIELDS.has(key) ? 100 : 1)).toPrecision(12))),
-    ]),
+    (Object.keys(LIMITS) as NumericField[]).map((key) => {
+      const value = input[key];
+      if (value === null) return [key, ""];
+      const scale = PERCENT_FIELDS.has(key) ? 100 : 1;
+      return [key, String(Number((value * scale).toPrecision(12)))];
+    }),
   ) as FormValues;
 }
 export function parseForm(form: FormValues): Outcome<ValuationInputs> {
   const data: Record<string, unknown> = { version: INPUT_VERSION };
   for (const key of Object.keys(LIMITS) as NumericField[]) {
     const raw = form[key].trim();
-    data[key] =
-      raw === ""
-        ? key === "netCashB" || key === "targetEquityB"
-          ? null
-          : NaN
-        : Number(raw) / (PERCENT_FIELDS.has(key) ? 100 : 1);
+    if (raw === "") {
+      const optional = key === "netCashB" || key === "targetEquityB";
+      data[key] = optional ? null : Number.NaN;
+    } else {
+      data[key] = Number(raw) / (PERCENT_FIELDS.has(key) ? 100 : 1);
+    }
   }
   return validateInputs(data);
 }

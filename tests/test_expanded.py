@@ -1,18 +1,20 @@
 """Check source joins, feature cutoffs, and challenger evaluation boundaries."""
-from copy import deepcopy
-import json
+
 import gzip
-from tempfile import TemporaryDirectory
-from pathlib import Path
+import json
 import unittest
+from copy import deepcopy
+from pathlib import Path
+from tempfile import TemporaryDirectory
 
 import numpy as np
 
 from ipo_research.dataset import make_features
 from ipo_research.expanded.dataset import pre_features, snapshots
-from ipo_research.expanded.evaluate import temporal_folds, paired_intervals, stats
+from ipo_research.expanded.evaluate import paired_intervals, stats, temporal_folds
 from ipo_research.expanded.models import Transform, features_for, fit_baseline, inner_split
-from ipo_research.expanded.sources import load_json, save_json, sha, parse_stockanalysis, scope_exclusion
+from ipo_research.expanded.sources import parse_stockanalysis, scope_exclusion
+from ipo_research.expanded.storage import load_json, save_json, sha
 from ipo_research.models import fit_models, matrix
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -42,14 +44,23 @@ class ExpandedTests(unittest.TestCase):
             self.assertEqual(packed.read_bytes(), first)
 
     def test_brier_skill_references_differ_under_event_rate_shift(self):
-        rows = [{"as_of": "2020-01-01", "event": event, "drawdown": .4 * event,
-                 "probabilities": {"base_rate": .1, "logistic": .5}} for event in (0, 1)]
+        rows = [
+            {
+                "as_of": "2020-01-01",
+                "event": event,
+                "drawdown": 0.4 * event,
+                "probabilities": {"base_rate": 0.1, "logistic": 0.5},
+            }
+            for event in (0, 1)
+        ]
         metric = stats(rows, "logistic")
-        self.assertAlmostEqual(metric["brier"], .25)
-        self.assertAlmostEqual(metric["training_rate_reference_brier"], .41)
-        self.assertAlmostEqual(metric["brier_skill"], 1 - .25 / .41)
+        self.assertAlmostEqual(metric["brier"], 0.25)
+        self.assertAlmostEqual(metric["training_rate_reference_brier"], 0.41)
+        self.assertAlmostEqual(metric["brier_skill"], 1 - 0.25 / 0.41)
         self.assertEqual(metric["brier_skill_vs_constant_50"], 0)
-        self.assertEqual(paired_intervals(rows, "logistic", 20)["brier_skill_vs_constant_50_ci"], [0, 0])
+        self.assertEqual(
+            paired_intervals(rows, "logistic", 20)["brier_skill_vs_constant_50_ci"], [0, 0]
+        )
 
     def test_coverage_sensitivity_refits_without_changing_held_out_issuers(self):
         protocol = load_json(DATA / "coverage-protocol.json")
@@ -62,7 +73,9 @@ class ExpandedTests(unittest.TestCase):
                 self.assertTrue(all(row["listing_date"] >= "2018-01-01" for row in recent["train"]))
                 self.assertLess(max(row["label_end"] for row in recent["train"]), recent["start"])
                 fit, valid, _ = inner_split(recent["train"])
-                self.assertLess(max(row["label_end"] for row in fit), min(row["as_of"] for row in valid))
+                self.assertLess(
+                    max(row["label_end"] for row in fit), min(row["as_of"] for row in valid)
+                )
 
     def test_source_parser_excludes_current_prices_and_returns(self):
         html = """<table><thead><tr><th>IPO Date</th><th>Symbol</th><th>Company Name</th><th>IPO Price</th></tr></thead>
@@ -72,13 +85,19 @@ class ExpandedTests(unittest.TestCase):
         self.assertNotIn("current_price", parsed[0])
         self.assertNotIn("return", parsed[0])
         with self.assertRaises(ValueError):
-            parse_stockanalysis(html.replace("IPO Price", "Current Price"), "https://example.test/source")
+            parse_stockanalysis(
+                html.replace("IPO Price", "Current Price"), "https://example.test/source"
+            )
 
     def test_scope_rules_quarantine_acquisition_companies_and_direct_listings(self):
         row = {"symbol": "TEST", "name": "Test Corporation", "adr_code": 1}
         self.assertIsNone(scope_exclusion(row))
-        self.assertEqual(scope_exclusion({**row, "name": "Test Acquisition Corp"}), "acquisition_company_name")
-        self.assertEqual(scope_exclusion({**row, "symbol": "TESTU"}), "unit_warrant_or_right_ticker")
+        self.assertEqual(
+            scope_exclusion({**row, "name": "Test Acquisition Corp"}), "acquisition_company_name"
+        )
+        self.assertEqual(
+            scope_exclusion({**row, "symbol": "TESTU"}), "unit_warrant_or_right_ticker"
+        )
         self.assertEqual(scope_exclusion({**row, "symbol": "SPOT"}), "direct_listing")
         self.assertEqual(scope_exclusion({**row, "adr_code": 6}), "unsupported_security_code")
 
@@ -92,7 +111,7 @@ class ExpandedTests(unittest.TestCase):
         changed_market = deepcopy(market)
         for bar in changed_market:
             if bar["date"] >= listing["listing_date"]:
-                bar["adjusted_close"] *= .01
+                bar["adjusted_close"] *= 0.01
         self.assertEqual(before, pre_features(changed, changed_market, self.universe["registry"]))
         self.assertLess(before[1], listing["listing_date"])
 
@@ -116,14 +135,14 @@ class ExpandedTests(unittest.TestCase):
         bars[20]["adjusted_close"] = 70
         pre, _ = snapshots(bundle, self.universe, 0)
         day, _ = snapshots(bundle, self.universe, 20)
-        self.assertAlmostEqual(pre[0]["drawdown"], .3)
+        self.assertAlmostEqual(pre[0]["drawdown"], 0.3)
         self.assertEqual(day[0]["drawdown"], 0)
         bars[39]["adjusted_close"] = 50
         pre_after, _ = snapshots(bundle, self.universe, 0)
         day_after, _ = snapshots(bundle, self.universe, 20)
         self.assertEqual(pre, pre_after)
         self.assertEqual(day[0]["features"], day_after[0]["features"])
-        self.assertAlmostEqual(day_after[0]["drawdown"], .5)
+        self.assertAlmostEqual(day_after[0]["drawdown"], 0.5)
 
     def test_day_20_price_features_preserve_the_mvp_definition(self):
         listing = self.bundle["listings"][0]
@@ -149,7 +168,9 @@ class ExpandedTests(unittest.TestCase):
             for fold in temporal_folds(self.dataset["stages"][stage], self.protocol):
                 train, test = fold["train"], fold["test"]
                 self.assertLess(max(r["label_end"] for r in train), min(r["as_of"] for r in test))
-                self.assertTrue({r["issuer_id"] for r in train}.isdisjoint(r["issuer_id"] for r in test))
+                self.assertTrue(
+                    {r["issuer_id"] for r in train}.isdisjoint(r["issuer_id"] for r in test)
+                )
                 self.assertTrue(seen.isdisjoint(r["id"] for r in test))
                 seen.update(r["id"] for r in test)
                 fit, valid, info = inner_split(train)
@@ -168,7 +189,11 @@ class ExpandedTests(unittest.TestCase):
         x = transform.apply(future, embedding=True)
         self.assertEqual(x[0, 2 * len(transform.numeric)], 0)
         self.assertNotIn("new-category", transform.categories["adr"])
-        column = [r["features"]["log_offer_price"] for r in rows if r["features"]["log_offer_price"] is not None]
+        column = [
+            r["features"]["log_offer_price"]
+            for r in rows
+            if r["features"]["log_offer_price"] is not None
+        ]
         self.assertAlmostEqual(transform.median[0], float(np.median(column)))
 
     def test_original_baseline_fits_match_on_the_same_expanded_rows(self):
@@ -180,8 +205,11 @@ class ExpandedTests(unittest.TestCase):
             np.testing.assert_allclose(actual, expected, atol=1e-12)
 
     def test_bootstrap_preserves_paired_identity(self):
-        rows = [{"as_of": day, "event": event, "probabilities": {"base_rate": .3, "logistic": .4}}
-                for day in ("2020-01-01", "2020-04-01", "2020-07-01", "2020-10-01") for event in (0, 1)]
+        rows = [
+            {"as_of": day, "event": event, "probabilities": {"base_rate": 0.3, "logistic": 0.4}}
+            for day in ("2020-01-01", "2020-04-01", "2020-07-01", "2020-10-01")
+            for event in (0, 1)
+        ]
         result = paired_intervals(rows, "logistic", 100)
         self.assertEqual(result["brier_difference_vs_logistic_ci"], [0, 0])
         self.assertEqual(paired_intervals(rows, "base_rate", 100)["brier_skill_ci"], [0, 0])

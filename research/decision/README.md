@@ -1,6 +1,6 @@
 # Allocator decision study
 
-You have no demonstrated allocation-policy benefit from the current classifiers. You can reproduce the critique with `uv run --extra challengers python research/decision/audit.py` and inspect the executed companion notebook. The audit preserves the frozen study and uses its held-out issuer IDs.
+You have no demonstrated allocation-policy benefit from the current classifiers. You can reproduce the critique with `uv run --extra challengers ipo-challengers audit` and inspect the [executed companion notebook](audit.ipynb). The audit preserves the frozen study and uses its held-out issuer IDs.
 
 You compare single-feature rankings on matching cases. For pre-IPO offer-price comparisons, you exclude 27 cases without an offer price and rescore the models on the remaining 953 cases. You selected the features and directions after viewing the study, so these comparisons remain retrospective diagnostics.
 
@@ -15,3 +15,11 @@ You must derive event dates from the applicable terms. FINRA specifies a ten-day
 You cannot pre-register earlier 2026 outcomes on September 7, 2026. You must start the prospective cohort after the final protocol and implementation commit, then preserve dated forecasts before their outcome windows. You can use prior outcomes for development with that status stated.
 
 You should build the Anthropic presentation around comparable deal terms and offer-based price paths. The current registry does not establish the claimed count of thirty comparable large-cap technology IPOs. You need explicit sector and size rules before you count that cohort.
+
+You can rerun the notebook from the repository root with the optional notebook tools:
+
+```sh
+uv run --extra challengers --with nbconvert --with ipykernel python -m jupyter nbconvert --execute --to notebook --inplace research/decision/audit.ipynb
+```
+
+You retain `audit.py` as the notebook's entry point. The CLI and notebook call the same audit implementation.

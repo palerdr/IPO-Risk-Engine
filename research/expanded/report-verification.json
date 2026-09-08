@@ -20,14 +20,14 @@
     390
   ],
   "timings": {
-    "validateAndPackageMs": 1072.2,
-    "staticChartExtractionMs": 1022.1,
-    "browserRunMs": 709.9,
-    "readerReadyMs": 49.2,
+    "validateAndPackageMs": 1085,
+    "staticChartExtractionMs": 1037.4,
+    "browserRunMs": 678.5,
+    "readerReadyMs": 47.2,
     "contentChecksMs": 32,
     "sourceDialogMs": 32,
     "responsiveChecksMs": 32,
-    "verificationMs": 719,
-    "totalMs": 1796.1
+    "verificationMs": 687.5,
+    "totalMs": 1777.5
   }
 }

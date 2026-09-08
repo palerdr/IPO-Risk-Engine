@@ -1,4 +1,5 @@
 """Fit a fixed linear classifier and a shallow boosted-tree challenger."""
+
 import numpy as np
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.linear_model import LogisticRegression
@@ -9,9 +10,15 @@ from .dataset import FEATURES
 
 MODEL_CONFIG = {
     "logistic": {"C": 0.1, "max_iter": 2000, "solver": "lbfgs", "random_state": 42},
-    "boosted_trees": {"n_estimators": 75, "learning_rate": 0.03, "max_depth": 2,
-                      "min_samples_leaf": 10, "subsample": 1.0, "n_iter_no_change": None,
-                      "random_state": 42},
+    "boosted_trees": {
+        "n_estimators": 75,
+        "learning_rate": 0.03,
+        "max_depth": 2,
+        "min_samples_leaf": 10,
+        "subsample": 1.0,
+        "n_iter_no_change": None,
+        "random_state": 42,
+    },
 }
 
 
@@ -35,8 +42,11 @@ def fit_models(rows: list[dict]) -> dict:
 def export_logistic(model, train: list[dict]) -> dict:
     scaler, classifier = model.steps[0][1], model.steps[1][1]
     return {
-        "features": list(FEATURES), "mean": scaler.mean_.tolist(), "scale": scaler.scale_.tolist(),
-        "coefficients": classifier.coef_[0].tolist(), "intercept": float(classifier.intercept_[0]),
+        "features": list(FEATURES),
+        "mean": scaler.mean_.tolist(),
+        "scale": scaler.scale_.tolist(),
+        "coefficients": classifier.coef_[0].tolist(),
+        "intercept": float(classifier.intercept_[0]),
         "train_symbols": [row["symbol"] for row in train],
         "trained_through": max(row["label_end"] for row in train),
     }
@@ -53,6 +63,10 @@ def predict_frozen(model: dict, features: dict, as_of: str) -> tuple[float, list
     contributions = (values - model["mean"]) / model["scale"] * model["coefficients"]
     score = float(model["intercept"] + contributions.sum())
     probability = float(1 / (1 + np.exp(-np.clip(score, -700, 700))))
-    drivers = [{"feature": key, "value": float(value), "log_odds_contribution": float(contribution)}
-               for key, value, contribution in zip(FEATURES, values, contributions)]
-    return probability, sorted(drivers, key=lambda row: abs(row["log_odds_contribution"]), reverse=True)
+    drivers = [
+        {"feature": key, "value": float(value), "log_odds_contribution": float(contribution)}
+        for key, value, contribution in zip(FEATURES, values, contributions)
+    ]
+    return probability, sorted(
+        drivers, key=lambda row: abs(row["log_odds_contribution"]), reverse=True
+    )

@@ -4,7 +4,7 @@
     "version": 1,
     "surface": "report",
     "title": "IPO challenger study",
-    "generatedAt": "2026-09-08T00:01:22.859503+00:00",
+    "generatedAt": "2026-09-08T02:08:26.511888+00:00",
     "blocks": [
       {
         "id": "title",
@@ -577,7 +577,7 @@
           "tables_used": [
             "forecasts"
           ],
-          "executed_at": "2026-09-08T00:01:22.859503+00:00"
+          "executed_at": "2026-09-08T02:08:26.511888+00:00"
         }
       },
       {
@@ -629,7 +629,7 @@
   "snapshot": {
     "version": 1,
     "status": "ready",
-    "generatedAt": "2026-09-08T00:01:22.859503+00:00",
+    "generatedAt": "2026-09-08T02:08:26.511888+00:00",
     "datasets": {
       "pre_metrics": [
         {
@@ -1312,7 +1312,7 @@
         "tables_used": [
           "forecasts"
         ],
-        "executed_at": "2026-09-08T00:01:22.859503+00:00"
+        "executed_at": "2026-09-08T02:08:26.511888+00:00"
       }
     },
     {

@@ -82,6 +82,6 @@ The old 656-IPO and +0.106 Brier-skill claims remain under `legacy/`. They descr
 
 **Verification status**
 
-You have 27 passing Python tests: 13 for the MVP and 14 for the expanded challenger study. You also have 38 passing web tests. The web suite includes the 33 preserved financial fixtures and five tests for the new interface. The production build passes, and its HTML and referenced assets return HTTP 200. You can reproduce the saved report from its frozen input and reproduce each logistic probability from its exported fold model.
+You have 29 passing Python tests: 13 for the MVP, 14 for the expanded study, and two for audit integrity. You also have 38 passing web tests. The web suite includes the 33 preserved financial fixtures and five tests for the new interface. The production build passes, and its HTML and referenced assets return HTTP 200. You can reproduce the saved report from its frozen input and reproduce each logistic probability from its exported fold model.
 
-The local audit matched all 85 upstream response hashes and adjusted-close arrays against the frozen input, including SPY. No browser was available for visual inspection. The hosting source endpoint timed out, so this version has no published URL.
+The source audit matched all 85 upstream response hashes and adjusted-close arrays against the frozen input, including SPY. During the cleanup, I checked replay and valuation navigation in Chromium at desktop and mobile widths. I found no page overflow or browser errors. You run the dashboard from the local Vite command; this guide does not provide a hosted URL.
